@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thank You | AgriBuild</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #0b1224;
+      --muted: #5b6475;
+      --primary: #1b2f6b;
+      --accent: #0a8f44;
+      --border: #d8dce6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      background:
+        radial-gradient(circle at 10% -10%, rgba(27, 47, 107, 0.08), transparent 45%),
+        radial-gradient(circle at 100% 0%, rgba(10, 143, 68, 0.08), transparent 40%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    .card {
+      width: min(680px, 100%);
+      background: var(--card);
+      border: 1px solid rgba(27, 47, 107, 0.15);
+      border-radius: 18px;
+      padding: 1.8rem;
+      box-shadow: 0 18px 45px rgba(12, 20, 39, 0.12);
+    }
+    h1 {
+      margin: 0 0 0.6rem;
+      font-size: 1.7rem;
+      color: var(--primary);
+    }
+    p { margin: 0.45rem 0; color: var(--muted); line-height: 1.45; }
+    .ref {
+      margin-top: 1rem;
+      display: inline-block;
+      background: rgba(10, 143, 68, 0.12);
+      color: #0f7f3f;
+      border: 1px solid rgba(10, 143, 68, 0.28);
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .actions {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #0a8f44, #0f7f3f);
+      color: #fff;
+    }
+    .btn-ghost {
+      border-color: var(--border);
+      color: var(--muted);
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Thank you for your quote request</h1>
+    <p>We have received your details and our team will be in touch shortly.</p>
+    <p>If you need to add anything else, please reply with your reference below.</p>
+    <div class="ref" id="referenceTag" style="display:none;"></div>
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Submit another request</a>
+    </div>
+  </main>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const reference = params.get("reference");
+      const tag = document.getElementById("referenceTag");
+      if (reference && tag) {
+        tag.textContent = "Reference: " + reference;
+        tag.style.display = "inline-block";
+      }
+    })();
+  </script>
+</body>
+</html>

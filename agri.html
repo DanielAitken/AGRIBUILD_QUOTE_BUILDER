@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Steel Building Quote Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap");
+    :root {
+      --qb-primary: #1b2f6b;
+      --qb-primary-soft: rgba(27, 47, 107, 0.1);
+      --qb-accent: #0a8f44;
+      --qb-bg: #f6f7fb;
+      --qb-card-bg: #ffffff;
+      --qb-border: #d8dce6;
+      --qb-text-main: #0b1224;
+      --qb-text-muted: #5b6475;
+      --qb-radius: 12px;
+      --qb-shadow: 0 18px 45px rgba(12, 20, 39, 0.12);
+    }
+    * {
+      box-sizing: border-box;
+      font-family: "Work Sans", "Montserrat", "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      background:
+        radial-gradient(circle at 10% -10%, rgba(27, 47, 107, 0.08), transparent 45%),
+        radial-gradient(circle at 100% 0%, rgba(10, 143, 68, 0.08), transparent 40%),
+        #f6f7fb;
+      color: var(--qb-text-main);
+    }
+    /* Simple centered wrapper so the card stays at a readable width */
+    .qb-wrapper { max-width: 1100px; margin: 0 auto; }
+    .qb-card {
+      background: var(--qb-card-bg);
+      border-radius: 18px;
+      box-shadow: var(--qb-shadow);
+      padding: 1.5rem;
+      border: 1px solid rgba(27, 47, 107, 0.12);
+    }
+    @media (min-width: 900px) { .qb-card { padding: 2rem 2.25rem; } }
+    .qb-header { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1.5rem; }
+    .qb-heading-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .qb-title {
+      font-size:1.5rem; font-weight:700; letter-spacing:0.02em;
+      text-transform:uppercase; font-family:"Montserrat","Work Sans","Segoe UI",sans-serif;
+    }
+    .qb-badge {
+      font-size:0.72rem; background:var(--qb-primary); color:#fff;
+      padding:0.3rem 0.75rem; border-radius:999px; font-weight:600; white-space:nowrap;
+      text-transform:uppercase; letter-spacing:0.04em;
+    }
+    .qb-subtitle { font-size:0.9rem; color:var(--qb-text-muted); max-width:30rem; }
+    .qb-progress-bar {
+      position:relative; margin:1rem 0 0; height:6px; border-radius:999px;
+      background:#e5e7eb; overflow:hidden;
+    }
+    .qb-progress-fill {
+      position:absolute; inset:0; width:25%;
+      background:linear-gradient(90deg,#0a8f44,#1b2f6b);
+      border-radius:999px; transition:width 0.25s ease-out;
+    }
+    .qb-steps-labels {
+      display:flex; justify-content:space-between; margin-top:0.3rem;
+      font-size:0.75rem; color:var(--qb-text-muted);
+    }
+    .qb-layout {
+      display:grid; grid-template-columns:1fr; gap:1.75rem; margin-top:1.5rem;
+    }
+    @media (min-width:900px){
+      .qb-layout {
+        grid-template-columns:minmax(0,2.3fr) minmax(0,1.4fr);
+        align-items:flex-start;
+      }
+    }
+    .qb-form-section {
+      border-radius:var(--qb-radius);
+      background:#ffffff;
+      padding:1.2rem 1.1rem;
+      border:1px solid rgba(216,220,230,0.9);
+    }
+    @media (min-width:900px){ .qb-form-section{ padding:1.4rem 1.3rem; } }
+    .qb-step { display:none; animation:qb-fade 0.18s ease-out; }
+    .qb-step.qb-step-active { display:block; }
+    @keyframes qb-fade {
+      from { opacity:0; transform:translateY(4px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .qb-step-title {
+      font-weight:600; font-size:1rem; margin-bottom:0.8rem;
+      display:flex; align-items:center; gap:0.4rem;
+    }
+    .qb-step-title span {
+      font-size:0.68rem; font-weight:700; color:#fff;
+      background:var(--qb-primary); border-radius:999px;
+      padding:0.18rem 0.6rem; letter-spacing:0.04em;
+    }
+    .qb-grid { display:grid; grid-template-columns:1fr; gap:0.9rem 1rem; }
+    .qb-grid-2{ grid-template-columns:1fr; }
+    .qb-grid-3{ grid-template-columns:1fr; }
+    .qb-field { display:flex; flex-direction:column; gap:0.25rem; }
+    .qb-field-full { grid-column:1 / -1; }
+    .qb-label {
+      font-size:0.83rem; color:var(--qb-text-main);
+      display:flex; justify-content:space-between; align-items:baseline; gap:0.4rem;
+    }
+    .qb-label span { color:var(--qb-text-muted); font-size:0.75rem; font-weight:400; }
+    .qb-required { color:#dc2626; font-weight:600; margin-left:0.1rem; }
+    .qb-input,.qb-select,.qb-textarea {
+      border-radius:10px; border:1px solid var(--qb-border);
+      padding:0.6rem 0.7rem; font-size:0.88rem; outline:none; background:#fff;
+      transition:border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .qb-input:focus,.qb-select:focus,.qb-textarea:focus {
+      border-color:var(--qb-primary);
+      box-shadow:0 0 0 2px rgba(27, 47, 107, 0.2);
+      background:#ffffff;
+    }
+    .qb-textarea { min-height:80px; resize:vertical; }
+    .qb-choice-row {
+      display:flex; flex-direction:row; flex-wrap:wrap; gap:0.35rem; align-items:flex-start;
+    }
+    .qb-choice-row-horizontal { flex-direction:row; flex-wrap:nowrap; gap:0.55rem; overflow-x:auto; }
+    .qb-chip {
+      border-radius:999px; border:1px solid var(--qb-border);
+      padding:0.35rem 0.7rem; font-size:0.78rem; background:#fff;
+      cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;
+      transition:background 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+    }
+    .qb-chip input{ display:none; }
+    .qb-chip-active{
+      border-color:var(--qb-primary);
+      background:rgba(27, 47, 107, 0.08);
+      color:var(--qb-primary);
+      transform:none;
+    }
+    .qb-chip-dot{
+      width:9px; height:9px; border-radius:999px;
+      border:1.5px solid var(--qb-primary); background:#fff; flex-shrink:0;
+    }
+    .qb-chip-active .qb-chip-dot{ background:var(--qb-primary); }
+    .qb-help{ font-size:0.75rem; color:var(--qb-text-muted); }
+    .qb-submit-message{
+      margin-top:0.55rem;
+      font-size:0.84rem;
+      min-height:1.2em;
+      text-align:right;
+      color:var(--qb-text-muted);
+    }
+    .qb-submit-message-success{ color:#0f766e; }
+    .qb-submit-message-error{ color:#b91c1c; }
+    .qb-note{
+      font-size:0.75rem; padding:0.6rem 0.75rem; background:#f2f5ff;
+      border-radius:10px; border:1px dashed #c8d2f0; color:var(--qb-primary); margin-top:0.4rem;
+    }
+    .qb-actions{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:0.75rem; margin-top:1.2rem;
+    }
+    .qb-actions-right{ display:flex; gap:0.5rem; }
+    .qb-btn{
+      border-radius:999px; border:1px solid transparent;
+      padding:0.45rem 1.1rem; font-size:0.85rem; font-weight:600;
+      display:inline-flex; align-items:center; justify-content:center; gap:0.35rem;
+      cursor:pointer; transition:background 0.18s ease, transform 0.08s ease,
+                       box-shadow 0.18s ease, border-color 0.18s ease;
+      white-space:nowrap;
+    }
+    .qb-btn-primary{
+      background:linear-gradient(90deg,#0a8f44,#0f7f3f);
+      color:white; box-shadow:0 12px 25px rgba(10,143,68,0.35);
+      text-transform:uppercase; letter-spacing:0.04em; font-size:0.8rem;
+    }
+    .qb-btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 16px 30px rgba(10,143,68,0.5);
+    }
+    .qb-btn-ghost{
+      background:transparent; color:var(--qb-text-muted); border-color:var(--qb-border);
+    }
+    .qb-btn-ghost:hover{
+      border-color:#9ca3af; background:rgba(249,250,251,0.9);
+    }
+    .qb-btn[disabled]{ opacity:0.7; cursor:not-allowed; box-shadow:none; transform:none; }
+
+    .qb-summary{
+      border-radius:var(--qb-radius);
+      background:#ffffff;
+      color:var(--qb-text-main);
+      padding:1.3rem 1.2rem;
+      position:relative; overflow:hidden;
+      border:1px solid rgba(27, 47, 107, 0.16);
+    }
+    @media (min-width:900px){ .qb-summary{ padding:1.5rem; } }
+    .qb-summary::before{
+      content:""; position:absolute; inset:-40%;
+      background:radial-gradient(circle at 0 0,rgba(27,47,107,0.08),transparent 55%);
+      opacity:0.7; pointer-events:none;
+    }
+    .qb-summary-inner{ position:relative; z-index:1; }
+    .qb-summary-title{
+      font-size:1rem; font-weight:600; margin-bottom:0.4rem;
+      display:flex; align-items:center; gap:0.45rem;
+    }
+    .qb-summary-pill{
+      font-size:0.68rem; border-radius:999px; background:var(--qb-primary);
+      padding:0.12rem 0.6rem; color:#fff; letter-spacing:0.04em;
+      text-transform:uppercase;
+    }
+    .qb-summary-list{
+      list-style:none; padding:0; margin:0.7rem 0 0.6rem;
+      font-size:0.8rem; display:flex; flex-direction:column; gap:0.35rem;
+    }
+    .qb-summary-list li{
+      display:flex; justify-content:space-between; gap:0.5rem;
+    }
+    .qb-summary-label{ color:#6b7280; }
+    .qb-summary-value{ font-weight:500; text-align:right; }
+    .qb-summary-footer{ margin-top:0.8rem; font-size:0.75rem; color:#6b7280; }
+    .qb-summary-tagline{
+      margin-top:0.4rem; font-size:0.78rem; color:var(--qb-accent);
+      display:flex; align-items:center; gap:0.3rem;
+    }
+    .qb-summary-tagline span{ font-size:1rem; }
+    .qb-file{
+      border-radius:10px; border:1px dashed #cbd5f5;
+      background:#f9fafb; padding:0.7rem 0.75rem;
+      font-size:0.8rem; display:flex; flex-direction:column; gap:0.35rem;
+    }
+    .qb-file input[type="file"]{ font-size:0.8rem; }
+    .qb-small-note{ font-size:0.72rem; color:var(--qb-text-muted); }
+    .qb-hidden{ display:none !important; }
+    .qb-roof-visuals{
+      background:#ffffff;
+      border:1px solid var(--qb-border);
+      border-radius:12px;
+      padding:0.8rem 0.9rem;
+      box-shadow:0 6px 18px rgba(15,23,42,0.04);
+    }
+    .qb-roof-grid{
+      display:grid; grid-template-columns:1fr; gap:0.65rem;
+    }
+    @media(min-width:700px){
+      .qb-roof-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    .qb-roof-card{
+      border:1px solid var(--qb-border);
+      border-radius:12px;
+      padding:0.55rem;
+      background:#f9fafb;
+      display:flex;
+      gap:0.65rem;
+      cursor:pointer;
+      transition: border-color 0.15s ease, box-shadow 0.18s ease, transform 0.08s ease, background 0.18s ease;
+      text-align:left;
+    }
+    .qb-roof-card:hover{ border-color:#cbd5e1; transform:translateY(-1px); }
+    .qb-roof-card-active{
+      border-color:var(--qb-primary);
+      box-shadow:0 10px 20px rgba(15,118,110,0.15);
+      background:var(--qb-primary-soft);
+    }
+    .qb-roof-card-img{
+      width:74px; height:60px;
+      border-radius:10px;
+      background-size:cover;
+      background-position:center;
+      flex-shrink:0;
+      border:1px solid rgba(148,163,184,0.6);
+    }
+    .qb-roof-card-meta{ display:flex; flex-direction:column; gap:0.18rem; }
+    .qb-roof-card-title{ font-size:0.88rem; font-weight:600; }
+    .qb-roof-card-note{ font-size:0.78rem; color:var(--qb-text-muted); line-height:1.35; }
+    .qb-roof-summary-visual{
+      display:flex;
+      align-items:center;
+      gap:0.65rem;
+      margin:0.7rem 0 0.1rem;
+      padding:0.55rem 0.65rem;
+      background:rgba(148,163,184,0.12);
+      border:1px solid rgba(148,163,184,0.35);
+      border-radius:12px;
+    }
+    .qb-roof-summary-img{
+      width:66px; height:54px;
+      border-radius:10px;
+      background-size:cover;
+      background-position:center;
+      border:1px solid rgba(148,163,184,0.55);
+      flex-shrink:0;
+    }
+    .qb-roof-summary-copy{ display:flex; flex-direction:column; gap:0.1rem; }
+    .qb-roof-summary-label{ font-size:0.72rem; color:#9ca3af; text-transform:uppercase; letter-spacing:0.02em; }
+    .qb-roof-summary-name{ font-size:0.88rem; font-weight:600; color:#e2e8f0; }
+    .qb-roof-modal-backdrop{
+      position:fixed; inset:0; background:rgba(15,23,42,0.65); display:none;
+      align-items:center; justify-content:center; z-index:9999; padding:1.5rem;
+    }
+    .qb-roof-modal{
+      background:#0b1120; border-radius:18px; box-shadow:0 25px 50px rgba(0,0,0,0.35);
+      max-width:840px; width:100%; overflow:hidden; border:1px solid rgba(148,163,184,0.35);
+    }
+    .qb-roof-modal img{
+      width:100%; display:block; height:auto; object-fit:contain; background:#0b1120;
+    }
+    .qb-roof-modal-header{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:0.85rem 1rem; color:#e2e8f0; background:#0f172a;
+      border-bottom:1px solid rgba(148,163,184,0.35);
+    }
+    .qb-roof-modal-title{ font-weight:600; font-size:0.95rem; }
+    .qb-roof-modal-close{
+      background:none; border:none; color:#94a3b8; font-size:1.1rem; cursor:pointer;
+      padding:0.25rem 0.45rem; border-radius:8px; transition:background 0.15s ease, color 0.15s ease;
+    }
+    .qb-roof-modal-close:hover{ background:rgba(148,163,184,0.2); color:#e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="qb-wrapper">
+    <form id="quoteBuilderForm" class="qb-card" action="/quote" method="post" enctype="multipart/form-data">
+      <div class="qb-header">
+        <div class="qb-heading-row">
+          <div>
+            <div class="qb-title">Steel Building Quote Builder</div>
+            <div class="qb-subtitle">
+              Answer a few quick questions about your project and we’ll prepare a tailored quotation.
+            </div>
+          </div>
+          <div class="qb-badge">Average completion: 2–3 minutes</div>
+        </div>
+        <div class="qb-progress-bar">
+          <div class="qb-progress-fill" id="qbProgressFill"></div>
+        </div>
+        <div class="qb-steps-labels">
+          <span>1. Project</span><span>2. Specification</span><span>3. Site &amp; planning</span><span>4. Contact</span>
+        </div>
+      </div>
+
+      <div class="qb-layout">
+        <!-- LEFT SIDE – FORM -->
+        <div class="qb-form-section">
+          <!-- STEP 1 -->
+          <div class="qb-step qb-step-active" data-step="0">
+            <div class="qb-step-title"><span>STEP 1</span> Project overview</div>
+            <div class="qb-grid qb-grid-2">
+              <div class="qb-field qb-field-full">
+                <label class="qb-label">
+                  Package required <span><span class="qb-required">*</span> choose one</span>
+                </label>
+                <div class="qb-choice-row qb-choice-row-horizontal">
+                  <button type="button" class="qb-chip" data-chip="supply" data-value="Supply only">
+                    <span class="qb-chip-dot"></span> Supply only
+                  </button>
+                  <button type="button" class="qb-chip" data-chip="supply" data-value="Supply &amp; erect">
+                    <span class="qb-chip-dot"></span> Supply &amp; erect
+                  </button>
+                  <button type="button" class="qb-chip" data-chip="supply" data-value="Price for both">
+                    <span class="qb-chip-dot"></span> Price for both
+                  </button>
+                </div>
+                <input type="hidden" name="supply_option" id="supplyInput" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Division <span><span class="qb-required">*</span> e.g. agricultural, industrial</span>
+                </label>
+                <div class="qb-choice-row">
+                  <button type="button" class="qb-chip" data-chip="division" data-value="Agricultural">
+                    <span class="qb-chip-dot"></span> Agricultural
+                  </button>
+                  <button type="button" class="qb-chip" data-chip="division" data-value="Structural / Industrial">
+                    <span class="qb-chip-dot"></span> Structural / Industrial
+                  </button>
+                </div>
+                <input type="hidden" name="division" id="divisionInput" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Proposed use <span><span class="qb-required">*</span> main purpose of the building</span>
+                </label>
+                <input
+                  type="text"
+                  name="proposed_use"
+                  class="qb-input"
+                  placeholder="Describe the main purpose"
+                  required
+                />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Building type <span><span class="qb-required">*</span></span>
+                </label>
+                <select name="building_type" class="qb-select" required>
+                  <option value="">Select an option</option>
+                  <option>Freestanding</option>
+                  <option>Apex</option>
+                  <option>Mono-pitch</option>
+                  <option>Lean-to</option>
+                  <option>Other / not sure</option>
+                </select>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Measurement units <span><span class="qb-required">*</span></span>
+                </label>
+                <div class="qb-choice-row">
+                  <button type="button" class="qb-chip" data-chip="units" data-value="Metres">
+                    <span class="qb-chip-dot"></span> Metres
+                  </button>
+                  <button type="button" class="qb-chip" data-chip="units" data-value="Feet">
+                    <span class="qb-chip-dot"></span> Feet
+                  </button>
+                </div>
+                <input type="hidden" name="units" id="unitsInput" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Length <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="number" step="0.01" min="0" name="length" class="qb-input" placeholder="e.g. 40" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Width <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="number" step="0.01" min="0" name="width" class="qb-input" placeholder="e.g. 30" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Height <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="number" step="0.01" min="0" name="height" class="qb-input" placeholder="e.g. 12" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Brief description
+                  <span>optional</span>
+                </label>
+                <textarea name="project_notes" class="qb-textarea"
+                  placeholder="Any key requirements, existing structures, or timings…"></textarea>
+              </div>
+            </div>
+
+            <div class="qb-note">
+              Not sure on all the details? That’s fine – complete what you can and we’ll discuss the rest with you.
+            </div>
+
+            <div class="qb-actions">
+              <span class="qb-help">Step 1 of 4</span>
+              <div class="qb-actions-right">
+                <button type="button" class="qb-btn qb-btn-primary" data-next>Next step →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="qb-step" data-step="1">
+            <div class="qb-step-title"><span>STEP 2</span> Building specification</div>
+            <div class="qb-grid qb-grid-2">
+              <div class="qb-field">
+                <label class="qb-label">
+                  Steelwork finish <span><span class="qb-required">*</span></span>
+                </label>
+                <select name="steelwork_finish" class="qb-select" required>
+                  <option value="">Select</option>
+                  <option>Galvanised</option>
+                  <option>Painted</option>
+                  <option>Not sure – please advise</option>
+                </select>
+                <div class="qb-help">
+                  Galvanising gives a long-life, low-maintenance finish – ideal for exposed sites.
+                </div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Roof material <span><span class="qb-required">*</span></span>
+                </label>
+                <select name="roof_material" class="qb-select" required>
+                  <option value="">Select</option>
+                  <option>Fibre cement - natural</option>
+                  <option>Steel - single skin</option>
+                  <option>Steel - anti-condensation</option>
+                  <option>Composite / insulated panel</option>
+                  <option>Other / to be confirmed</option>
+                </select>
+              </div>
+              <div class="qb-field qb-hidden" id="roofOtherField">
+                <label class="qb-label">
+                  Other roof material details <span>optional</span>
+                </label>
+                <input
+                  type="text"
+                  name="roof_material_custom"
+                  class="qb-input"
+                  placeholder="Please tell us the roof material you want"
+                />
+              </div>
+
+              <div class="qb-field qb-roof-visuals">
+                <label class="qb-label">
+                  Roof material examples <span>tap to preview and auto-select</span>
+                </label>
+                <div class="qb-roof-grid" id="roofGallery"></div>
+                <div class="qb-small-note">
+                  Images are indicative; finishes and colours vary by manufacturer.
+                </div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Wall material <span><span class="qb-required">*</span></span>
+                </label>
+                <select name="wall_material" class="qb-select" required>
+                  <option value="">Select</option>
+                  <option>Steel - single skin</option>
+                  <option>Steel - anti-condensation</option>
+                  <option>Composite / insulated panel</option>
+                  <option>Fibre cement - natural</option>
+                  <option>Timber boarding</option>
+                  <option>Other / to be confirmed</option>
+                </select>
+              </div>
+              <div class="qb-field qb-hidden" id="wallOtherField">
+                <label class="qb-label">
+                  Other wall material details <span>optional</span>
+                </label>
+                <input
+                  type="text"
+                  name="wall_material_custom"
+                  class="qb-input"
+                  placeholder="Please tell us the wall material you want"
+                />
+              </div>
+
+              <div class="qb-field qb-roof-visuals">
+                <label class="qb-label">
+                  Wall material examples <span>tap to preview and auto-select</span>
+                </label>
+                <div class="qb-roof-grid" id="wallGallery"></div>
+                <div class="qb-small-note">
+                  Images are indicative; finishes and colours vary by manufacturer.
+                </div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Is the building heated? <span><span class="qb-required">*</span></span>
+                </label>
+                <div class="qb-choice-row">
+                  <button type="button" class="qb-chip" data-chip="heated" data-value="Heated">
+                    <span class="qb-chip-dot"></span> Heated
+                  </button>
+                  <button type="button" class="qb-chip" data-chip="heated" data-value="Not heated">
+                    <span class="qb-chip-dot"></span> Not heated
+                  </button>
+                </div>
+                <input type="hidden" name="heated" id="heatedInput" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  External cladding
+                  <span>optional</span>
+                </label>
+                <textarea name="cladding" class="qb-textarea"
+                  placeholder="Preferred finish (e.g. box profile, Yorkshire boarding), open bays, ventilation, etc."></textarea>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Doors required
+                  <span>you can select multiple</span>
+                </label>
+                <div class="qb-choice-row">
+                  <label class="qb-chip">
+                    <input type="checkbox" name="doors[]" value="Manual roller shutter" />
+                    <span class="qb-chip-dot"></span> Manual roller shutter
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="doors[]" value="Electric roller shutter" />
+                    <span class="qb-chip-dot"></span> Electric roller shutter
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="doors[]" value="Sliding doors" />
+                    <span class="qb-chip-dot"></span> Sliding doors
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="doors[]" value="Personnel doors" />
+                    <span class="qb-chip-dot"></span> Personnel doors
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="doors[]" value="Openings only" />
+                    <span class="qb-chip-dot"></span> Openings only
+                  </label>
+                </div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Door sizes &amp; positions
+                  <span>if you don’t know exact sizes, rough sizes are absolutely fine</span>
+                </label>
+                <textarea name="door_details" class="qb-textarea"
+                  placeholder="E.g. 2 x approx. 4m wide roller shutters on side elevation, 1 x personnel door at gable."></textarea>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Internals / fittings
+                  <span>optional</span>
+                </label>
+                <textarea name="internal_fittings" class="qb-textarea"
+                  placeholder="Gates, barriers, cubicles, feed rails, drinkers, partitions, mezzanines, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="qb-actions">
+              <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
+              <div class="qb-actions-right">
+                <span class="qb-help">Step 2 of 4</span>
+                <button type="button" class="qb-btn qb-btn-primary" data-next>Next step →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="qb-step" data-step="2">
+            <div class="qb-step-title"><span>STEP 3</span> Site &amp; planning</div>
+            <div class="qb-grid qb-grid-2">
+              <div class="qb-field">
+                <label class="qb-label">
+                  Site postcode
+                  <span>optional but helpful</span>
+                </label>
+                <input type="text" name="site_postcode" class="qb-input" placeholder="e.g. DG11 2SD" />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Site address
+                  <span>optional</span>
+                </label>
+                <textarea name="site_address" class="qb-textarea"
+                  placeholder="If different from your main correspondence address."></textarea>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Area / setting description
+                  <span>optional – where the building will sit</span>
+                </label>
+                <textarea name="site_setting" class="qb-textarea"
+                  placeholder="Describe the area the building will be situated in – e.g. exposed hillside, sheltered yard, near existing buildings, ground levels/slopes, access for lorries/cranage, etc."></textarea>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Planning status <span><span class="qb-required">*</span></span>
+                </label>
+                <select name="planning_status" class="qb-select" required>
+                  <option value="">Select</option>
+                  <option>Full planning required</option>
+                  <option>Prior approval / notification</option>
+                  <option>Building warrant / SER certificate</option>
+                  <option>Already approved</option>
+                  <option>Unsure – need guidance</option>
+                </select>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Timescales
+                  <span>optional</span>
+                </label>
+                <input type="text" name="timescales" class="qb-input" placeholder="Ideal start / completion dates" />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Groundworks &amp; concrete
+                  <span>optional</span>
+                </label>
+                <textarea name="groundworks" class="qb-textarea"
+                  placeholder="Do you need foundations, concrete floors, walls or slurry stores included?"></textarea>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Other information
+                  <span>optional</span>
+                </label>
+                <textarea name="other_info" class="qb-textarea"
+                  placeholder="Access constraints, existing buildings to tie into, design notes, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="qb-actions">
+              <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
+              <div class="qb-actions-right">
+                <span class="qb-help">Step 3 of 4</span>
+                <button type="button" class="qb-btn qb-btn-primary" data-next>Next step →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="qb-step" data-step="3">
+            <div class="qb-step-title"><span>STEP 4</span> Contact details &amp; drawings</div>
+            <div class="qb-grid qb-grid-2">
+              <div class="qb-field">
+                <label class="qb-label">
+                  First name <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="text" name="first_name" class="qb-input" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Surname <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="text" name="last_name" class="qb-input" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Email address <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="email" name="email" class="qb-input" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Telephone <span><span class="qb-required">*</span></span>
+                </label>
+                <input type="tel" name="telephone" class="qb-input" required />
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Return date
+                  <span>optional</span>
+                </label>
+                <input type="date" name="return_date" class="qb-input" />
+              </div>
+
+              <div class="qb-field qb-field-full">
+                <label class="qb-label">
+                  Project requirements / message
+                  <span>optional</span>
+                </label>
+                <textarea name="client_message" class="qb-textarea"
+                  placeholder="Tell us anything important about your requirements, timing, access, or preferred specification."></textarea>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Drawings and site images
+                  <span>optional, up to 4 MB</span>
+                </label>
+                <div class="qb-file">
+                  <input type="file" name="drawings" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+                  <div class="qb-small-note">
+                    Attach any sketches or plans you already have – even a rough layout is helpful.
+                  </div>
+                </div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  How did you hear about us?
+                  <span>optional</span>
+                </label>
+                <select name="hear_about" class="qb-select">
+                  <option value="">Select</option>
+                  <option>Previous project</option>
+                  <option>Recommendation</option>
+                  <option>Google search</option>
+                  <option>Social media</option>
+                  <option>Press / farming media</option>
+                  <option>Show or event</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Marketing consent
+                  <span>optional</span>
+                </label>
+                <div class="qb-choice-row">
+                  <label class="qb-chip">
+                    <input type="radio" name="marketing" value="Yes" />
+                    <span class="qb-chip-dot"></span> Yes, keep me updated
+                  </label>
+                  <label class="qb-chip">
+                    <input type="radio" name="marketing" value="No" />
+                    <span class="qb-chip-dot"></span> No marketing, thank you
+                  </label>
+                </div>
+                <div class="qb-small-note">
+                  We’ll never sell your details to third parties, and you can opt out at any time.
+                </div>
+              </div>
+            </div>
+
+            <div class="qb-actions">
+              <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
+              <div class="qb-actions-right">
+                <span class="qb-help">Step 4 of 4</span>
+                <button type="submit" class="qb-btn qb-btn-primary">Submit quote request →</button>
+              </div>
+            </div>
+            <div id="qbSubmitMessage" class="qb-submit-message" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE – SNAPSHOT + 3D PREVIEW -->
+        <div class="qb-right-column">
+          <aside class="qb-summary">
+            <div class="qb-summary-inner">
+              <div class="qb-summary-title">
+                Project snapshot
+                <span class="qb-summary-pill" id="qbStepIndicator">Step 1 of 4</span>
+              </div>
+              <ul class="qb-summary-list">
+                <li><span class="qb-summary-label">Package</span><span class="qb-summary-value" id="summarySupply">–</span></li>
+                <li><span class="qb-summary-label">Division</span><span class="qb-summary-value" id="summaryDivision">–</span></li>
+                <li><span class="qb-summary-label">Use</span><span class="qb-summary-value" id="summaryUse">–</span></li>
+                <li><span class="qb-summary-label">Size</span><span class="qb-summary-value" id="summarySize">–</span></li>
+                <li><span class="qb-summary-label">Roof</span><span class="qb-summary-value" id="summaryRoof">–</span></li>
+                <li><span class="qb-summary-label">Wall</span><span class="qb-summary-value" id="summaryWall">–</span></li>
+                <li><span class="qb-summary-label">Location</span><span class="qb-summary-value" id="summaryLocation">–</span></li>
+                <li><span class="qb-summary-label">Contact</span><span class="qb-summary-value" id="summaryContact">–</span></li>
+              </ul>
+              <div class="qb-roof-summary-visual" id="summaryRoofVisual" style="display:none;">
+                <div class="qb-roof-summary-img"></div>
+                <div class="qb-roof-summary-copy">
+                  <div class="qb-roof-summary-label">Roof example</div>
+                  <div class="qb-roof-summary-name" id="summaryRoofName">-</div>
+                </div>
+              </div>
+              <div class="qb-summary-footer">
+                Once you submit your details, a member of our team will review your project and come back with a tailored proposal.
+                <div class="qb-summary-tagline">
+                  <span>✓</span> No obligation — just clear pricing and advice.
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- 3D layout preview -->
+          <aside class="qb-summary" style="margin-top:1rem;">
+            <div class="qb-summary-inner">
+              <div class="qb-summary-title">
+                Layout preview
+                <span class="qb-summary-pill">Not to scale</span>
+              </div>
+
+              <svg id="planPreview" viewBox="0 0 220 180" style="width:100%;max-width:260px;">
+                <defs>
+                  <marker id="dimArrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#9ca3af" />
+                  </marker>
+                </defs>
+
+                <rect x="0" y="0" width="220" height="180" fill="#020617"></rect>
+
+                <!-- Main box -->
+                <g id="boxGroup" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round">
+                  <polygon id="faceLeft"  fill="#0f766e33"></polygon>
+                  <polygon id="faceRight" fill="#0f766e55"></polygon>
+                  <!-- Roof surfaces (used for all roof types) -->
+                  <polygon id="roof1" fill="#0f766e88"></polygon>
+                  <polygon id="roof2" fill="#0f766e66"></polygon>
+
+                  <polyline id="edgesFront"></polyline>
+                  <polyline id="edgesBack"></polyline>
+                  <line id="edgeLeftVertical"></line>
+                  <line id="edgeRightVertical"></line>
+                  <!-- Apex ridge line -->
+                  <line id="ridgeLine" stroke="#22c55e" stroke-width="1.5"></line>
+                </g>
+
+                <!-- Lean-to extension -->
+                <g id="leanGroup" fill="none" stroke="#22c55e" stroke-width="1.2" stroke-linejoin="round" visibility="hidden">
+                  <polygon id="leanWall" fill="#0f766e33"></polygon>
+                  <polygon id="leanRoof" fill="#0f766e66"></polygon>
+                  <polyline id="leanEdges"></polyline>
+                </g>
+
+                <!-- Dimensions -->
+                <g id="dims" stroke="#9ca3af" stroke-width="1" font-size="9" fill="#e5e7eb" stroke-linecap="round">
+                  <!-- Width -->
+                  <line id="dimWidthExtL"></line>
+                  <line id="dimWidthExtR"></line>
+                  <line id="dimWidthLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimWidthText" text-anchor="middle">Width</text>
+                  <!-- Length (horizontal) -->
+                  <line id="dimLengthExtF"></line>
+                  <line id="dimLengthExtB"></line>
+                  <line id="dimLengthLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimLengthText" text-anchor="middle">Length</text>
+                  <!-- Height (text outside on the left) -->
+                  <line id="dimHeightExtB"></line>
+                  <line id="dimHeightExtT"></line>
+                  <line id="dimHeightLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimHeightText" text-anchor="end">Height</text>
+                </g>
+              </svg>
+
+              <div class="qb-summary-footer">
+                This sketch updates from your length, width and height – and the building type.
+                It’s just a guide – final drawings are prepared by our design team.
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="qb-roof-modal-backdrop" id="roofModal">
+    <div class="qb-roof-modal" role="dialog" aria-modal="true" aria-labelledby="roofModalTitle">
+      <div class="qb-roof-modal-header">
+        <div class="qb-roof-modal-title" id="roofModalTitle">Roof example</div>
+        <button class="qb-roof-modal-close" type="button" id="roofModalClose" aria-label="Close">x</button>
+      </div>
+      <img id="roofModalImg" alt="Roof material example" />
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("quoteBuilderForm");
+      const steps = Array.from(document.querySelectorAll(".qb-step"));
+      const progressFill = document.getElementById("qbProgressFill");
+      const stepIndicator = document.getElementById("qbStepIndicator");
+      const roofGalleryEl = document.getElementById("roofGallery");
+      const roofSelect = form.elements["roof_material"];
+      const wallGalleryEl = document.getElementById("wallGallery");
+      const wallSelect = form.elements["wall_material"];
+      const roofOtherField = document.getElementById("roofOtherField");
+      const wallOtherField = document.getElementById("wallOtherField");
+      const roofOtherInput = form.elements["roof_material_custom"];
+      const wallOtherInput = form.elements["wall_material_custom"];
+      const roofSummaryVisual = document.getElementById("summaryRoofVisual");
+      const roofSummaryImage = roofSummaryVisual
+        ? roofSummaryVisual.querySelector(".qb-roof-summary-img")
+        : null;
+      const summaryRoofName = document.getElementById("summaryRoofName");
+      const roofModal = document.getElementById("roofModal");
+      const roofModalImg = document.getElementById("roofModalImg");
+      const roofModalTitle = document.getElementById("roofModalTitle");
+      const roofModalClose = document.getElementById("roofModalClose");
+      const submitButton = form.querySelector('button[type="submit"]');
+      const submitMessage = document.getElementById("qbSubmitMessage");
+      let currentStep = 0;
+
+      function findRoofOption(keyword) {
+        if (!roofSelect) return "";
+        const lower = keyword.toLowerCase();
+        const match = Array.from(roofSelect.options).find((opt) =>
+          opt.textContent.toLowerCase().includes(lower)
+        );
+        return match ? match.textContent : "";
+      }
+
+      function findWallOption(keyword) {
+        if (!wallSelect) return "";
+        const lower = keyword.toLowerCase();
+        const match = Array.from(wallSelect.options).find((opt) =>
+          opt.textContent.toLowerCase().includes(lower)
+        );
+        return match ? match.textContent : "";
+      }
+
+      function isOtherMaterial(value) {
+        return String(value || "").toLowerCase().includes("other");
+      }
+
+      function syncOtherMaterialFields() {
+        const roofIsOther = isOtherMaterial(roofSelect ? roofSelect.value : "");
+        const wallIsOther = isOtherMaterial(wallSelect ? wallSelect.value : "");
+
+        if (roofOtherField) roofOtherField.classList.toggle("qb-hidden", !roofIsOther);
+        if (wallOtherField) wallOtherField.classList.toggle("qb-hidden", !wallIsOther);
+
+        if (roofOtherInput) {
+          roofOtherInput.disabled = !roofIsOther;
+          roofOtherInput.required = roofIsOther;
+          if (!roofIsOther) roofOtherInput.value = "";
+        }
+        if (wallOtherInput) {
+          wallOtherInput.disabled = !wallIsOther;
+          wallOtherInput.required = wallIsOther;
+          if (!wallIsOther) wallOtherInput.value = "";
+        }
+      }
+
+      const roofGalleryData = [
+        {
+          match: "Fibre cement",
+          label: "Fibre cement",
+          note: "Muted, low-glare finish often used on livestock buildings.",
+          image: "assets/fibre-cement-roof-panel.png?v=1"
+        },
+        {
+          match: "Steel - single skin",
+          label: "Steel - single skin",
+          note: "Cost-effective profiled steel sheeting with visible fasteners.",
+          image: "https://images.unsplash.com/photo-1503389152951-9f343605f61e?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Steel - anti-condensation",
+          label: "Steel - anti-condensation",
+          note: "Single skin steel with anti-condensation lining on the underside.",
+          image: "https://images.unsplash.com/photo-1504306662149-1b9a983f4710?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Composite / insulated panel",
+          label: "Composite / insulated panel",
+          note: "Insulated sandwich panels for warm roof build-ups.",
+          image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Other",
+          label: "Other / custom",
+          note: "Select this and type your preferred roof material below.",
+          image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80"
+        }
+      ]
+        .map((item) => ({ ...item, value: findRoofOption(item.match) }))
+        .filter((item) => item.value);
+
+      const wallGalleryData = [
+        {
+          match: "Steel - single skin",
+          label: "Steel - single skin",
+          note: "Profiled steel cladding for cost-effective walling.",
+          image: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Steel - anti-condensation",
+          label: "Steel - anti-condensation",
+          note: "Single skin steel with anti-condensation liner.",
+          image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Composite / insulated panel",
+          label: "Composite / insulated panel",
+          note: "Insulated panels for improved thermal performance.",
+          image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Fibre cement",
+          label: "Fibre cement",
+          note: "Traditional, low-glare finish for rural settings.",
+          image: "assets/fibre-cement-roof-panel.png?v=1"
+        },
+        {
+          match: "Timber",
+          label: "Timber boarding",
+          note: "Natural timber cladding for softer visual impact.",
+          image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          match: "Other",
+          label: "Other / custom",
+          note: "Select this and type your preferred wall material below.",
+          image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80"
+        }
+      ]
+        .map((item) => ({ ...item, value: findWallOption(item.match) }))
+        .filter((item) => item.value);
+
+      const roofGalleryCards = [];
+      const wallGalleryCards = [];
+
+      function renderRoofGallery() {
+        if (!roofGalleryEl || !roofSelect || !roofGalleryData.length) return;
+        if (!roofGalleryEl.childElementCount) {
+          roofGalleryData.forEach((item) => {
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "qb-roof-card";
+            card.setAttribute("data-value", item.value);
+
+            const img = document.createElement("div");
+            img.className = "qb-roof-card-img";
+            img.style.backgroundImage = `url('${item.image}')`;
+
+            const meta = document.createElement("div");
+            meta.className = "qb-roof-card-meta";
+
+            const title = document.createElement("div");
+            title.className = "qb-roof-card-title";
+            title.textContent = item.label;
+
+            const note = document.createElement("div");
+            note.className = "qb-roof-card-note";
+            note.textContent = item.note;
+
+            meta.appendChild(title);
+            meta.appendChild(note);
+            card.appendChild(img);
+            card.appendChild(meta);
+
+            card.addEventListener("click", () => {
+              roofSelect.value = item.value;
+              roofSelect.dispatchEvent(new Event("change", { bubbles: true }));
+              openMaterialModal(item, "Roof");
+            });
+
+            roofGalleryEl.appendChild(card);
+            roofGalleryCards.push({ card, item });
+          });
+        }
+
+        roofGalleryCards.forEach(({ card, item }) => {
+          card.classList.toggle("qb-roof-card-active", roofSelect.value === item.value);
+        });
+      }
+
+      function renderWallGallery() {
+        if (!wallGalleryEl || !wallSelect || !wallGalleryData.length) return;
+        if (!wallGalleryEl.childElementCount) {
+          wallGalleryData.forEach((item) => {
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "qb-roof-card";
+            card.setAttribute("data-value", item.value);
+
+            const img = document.createElement("div");
+            img.className = "qb-roof-card-img";
+            img.style.backgroundImage = `url('${item.image}')`;
+
+            const meta = document.createElement("div");
+            meta.className = "qb-roof-card-meta";
+
+            const title = document.createElement("div");
+            title.className = "qb-roof-card-title";
+            title.textContent = item.label;
+
+            const note = document.createElement("div");
+            note.className = "qb-roof-card-note";
+            note.textContent = item.note;
+
+            meta.appendChild(title);
+            meta.appendChild(note);
+            card.appendChild(img);
+            card.appendChild(meta);
+
+            card.addEventListener("click", () => {
+              wallSelect.value = item.value;
+              wallSelect.dispatchEvent(new Event("change", { bubbles: true }));
+              openMaterialModal(item, "Wall");
+            });
+
+            wallGalleryEl.appendChild(card);
+            wallGalleryCards.push({ card, item });
+          });
+        }
+
+        wallGalleryCards.forEach(({ card, item }) => {
+          card.classList.toggle("qb-roof-card-active", wallSelect.value === item.value);
+        });
+      }
+
+      function updateRoofSummaryVisual(value) {
+        if (!roofSummaryVisual) return;
+        const match = roofGalleryData.find((item) => item.value === value);
+        if (match) {
+          roofSummaryVisual.style.display = "flex";
+          if (roofSummaryImage) roofSummaryImage.style.backgroundImage = `url('${match.image}')`;
+          if (summaryRoofName) summaryRoofName.textContent = match.label;
+        } else {
+          roofSummaryVisual.style.display = "none";
+          if (summaryRoofName) summaryRoofName.textContent = value || "-";
+        }
+      }
+
+      function openMaterialModal(item, label) {
+        if (!roofModal || !roofModalImg) return;
+        roofModalImg.src = item.image;
+        roofModalImg.alt = item.label + " " + label.toLowerCase() + " example";
+        if (roofModalTitle) roofModalTitle.textContent = label + " example: " + item.label;
+        roofModal.style.display = "flex";
+      }
+
+      function closeRoofModal() {
+        if (roofModal) roofModal.style.display = "none";
+      }
+
+      /* STEP NAVIGATION ---------------------------------------------- */
+      function updateStep(newIndex) {
+        if (newIndex < 0 || newIndex >= steps.length) return;
+        // hide current step and show the requested one
+        steps[currentStep].classList.remove("qb-step-active");
+        currentStep = newIndex;
+        steps[currentStep].classList.add("qb-step-active");
+        // progress bar + indicator text update
+        const progress = ((currentStep + 1) / steps.length) * 100;
+        progressFill.style.width = progress + "%";
+        stepIndicator.textContent = "Step " + (currentStep + 1) + " of " + steps.length;
+      }
+
+      function validateStep(index) {
+        const step = steps[index];
+        const inputs = step.querySelectorAll("input, select, textarea");
+        for (const input of inputs) {
+          // use built-in HTML validation; bail out on the first invalid field
+          if (!input.checkValidity()) {
+            input.reportValidity();
+            return false;
+          }
+        }
+        return true;
+      }
+
+      document.querySelectorAll("[data-next]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (validateStep(currentStep)) updateStep(currentStep + 1);
+        });
+      });
+      document.querySelectorAll("[data-prev]").forEach((btn) => {
+        btn.addEventListener("click", () => updateStep(currentStep - 1));
+      });
+
+      /* CHIP LOGIC --------------------------------------------------- */
+      const chipGroups = {};
+      document.querySelectorAll(".qb-chip[data-chip]").forEach((chip) => {
+        const group = chip.getAttribute("data-chip");
+        if (!chipGroups[group]) chipGroups[group] = [];
+        chipGroups[group].push(chip);
+
+        chip.addEventListener("click", () => {
+          // only one active chip per group (supply, division, units, heated)
+          chipGroups[group].forEach((c) => c.classList.remove("qb-chip-active"));
+          chip.classList.add("qb-chip-active");
+          const value = chip.getAttribute("data-value");
+          if (group === "division") document.getElementById("divisionInput").value = value;
+          if (group === "units") document.getElementById("unitsInput").value = value;
+          if (group === "heated") document.getElementById("heatedInput").value = value;
+          if (group === "supply") document.getElementById("supplyInput").value = value;
+          updateSummary();
+        });
+      });
+
+      const chipInputs = document.querySelectorAll(
+        ".qb-chip input[type='checkbox'], .qb-chip input[type='radio']"
+      );
+      chipInputs.forEach((input) => {
+        const chip = input.closest(".qb-chip");
+        if (!chip) return;
+
+        const refreshState = () => {
+          if (input.type === "radio") {
+            document.querySelectorAll(`input[name="${input.name}"]`).forEach((other) => {
+              const otherChip = other.closest(".qb-chip");
+              if (otherChip) otherChip.classList.remove("qb-chip-active");
+            });
+            if (input.checked) chip.classList.add("qb-chip-active");
+          } else {
+            chip.classList.toggle("qb-chip-active", input.checked);
+          }
+        };
+
+        input.addEventListener("change", () => {
+          refreshState();
+          updateSummary();
+        });
+
+        refreshState();
+      });
+
+      if (roofSelect) {
+        roofSelect.addEventListener("change", () => {
+          syncOtherMaterialFields();
+          renderRoofGallery();
+        });
+      }
+      if (wallSelect) {
+        wallSelect.addEventListener("change", () => {
+          syncOtherMaterialFields();
+          renderWallGallery();
+        });
+      }
+
+      if (roofModalClose) {
+        roofModalClose.addEventListener("click", closeRoofModal);
+      }
+      if (roofModal) {
+        roofModal.addEventListener("click", (e) => {
+          if (e.target === roofModal) closeRoofModal();
+        });
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeRoofModal();
+      });
+
+      /* SVG ELEMENTS ------------------------------------------------- */
+      const svg = document.getElementById("planPreview");
+      const boxGroup = document.getElementById("boxGroup");
+      const dimsGroup = document.getElementById("dims");
+      const leanGroup = document.getElementById("leanGroup");
+
+      const faceLeft = document.getElementById("faceLeft");
+      const faceRight = document.getElementById("faceRight");
+      const roof1 = document.getElementById("roof1");
+      const roof2 = document.getElementById("roof2");
+      const edgesFront = document.getElementById("edgesFront");
+      const edgesBack = document.getElementById("edgesBack");
+      const edgeLeftVertical = document.getElementById("edgeLeftVertical");
+      const edgeRightVertical = document.getElementById("edgeRightVertical");
+      const ridgeLine = document.getElementById("ridgeLine");
+
+      const leanWall = document.getElementById("leanWall");
+      const leanRoof = document.getElementById("leanRoof");
+      const leanEdges = document.getElementById("leanEdges");
+
+      const dimWidthExtL = document.getElementById("dimWidthExtL");
+      const dimWidthExtR = document.getElementById("dimWidthExtR");
+      const dimWidthLine = document.getElementById("dimWidthLine");
+      const dimWidthText = document.getElementById("dimWidthText");
+
+      const dimLengthExtF = document.getElementById("dimLengthExtF");
+      const dimLengthExtB = document.getElementById("dimLengthExtB");
+      const dimLengthLine = document.getElementById("dimLengthLine");
+      const dimLengthText = document.getElementById("dimLengthText");
+
+      const dimHeightExtB = document.getElementById("dimHeightExtB");
+      const dimHeightExtT = document.getElementById("dimHeightExtT");
+      const dimHeightLine = document.getElementById("dimHeightLine");
+      const dimHeightText = document.getElementById("dimHeightText");
+
+      // Use direct selectors to avoid clashing with the form.elements.length property
+      const lengthInput = form.querySelector('input[name="length"]');
+      const widthInput = form.querySelector('input[name="width"]');
+      const heightInput = form.querySelector('input[name="height"]');
+
+      function setPoints(el, pts) {
+        if (!el) return;
+        el.setAttribute(
+          "points",
+          pts.map((p) => p[0] + "," + p[1]).join(" ")
+        );
+      }
+
+      /* PREVIEW DRAWING ---------------------------------------------- */
+      function updatePreview() {
+        if (!svg || !boxGroup || !dimsGroup) return;
+
+        const rawL = parseFloat(lengthInput.value || "0");
+        const rawW = parseFloat(widthInput.value || "0");
+        const rawH = parseFloat(heightInput.value || "0");
+
+        const unitsVal = form.elements["units"] ? form.elements["units"].value : "";
+        const unitShort =
+          unitsVal === "Metres" ? "m" :
+          unitsVal === "Feet"   ? "ft" : "";
+
+        const anyEntered = rawL > 0 || rawW > 0 || rawH > 0;
+
+        if (!anyEntered) {
+          boxGroup.style.visibility = "hidden";
+          dimsGroup.style.visibility = "hidden";
+          if (leanGroup) leanGroup.style.visibility = "hidden";
+          dimWidthText.textContent = "Width";
+          dimLengthText.textContent = "Length";
+          dimHeightText.textContent = "Height";
+          return;
+        }
+
+        boxGroup.style.visibility = "visible";
+        dimsGroup.style.visibility = "visible";
+
+        const fallbackBase = Math.max(rawL || 0, rawW || 0, rawH || 0) || 10;
+        const L = rawL > 0 ? rawL : fallbackBase;
+        const W = rawW > 0 ? rawW : fallbackBase;
+        const H = rawH > 0 ? rawH : fallbackBase;
+
+        // translate real-world numbers into a small isometric cube
+        const cx = 110;
+        const cy = 140;
+        const maxDim = Math.max(W + L, H * 1.5);
+        const s = 120 / maxDim;
+
+        const widthX = W * s;
+        const lengthX = L * s * 0.6;
+        const lengthY3d = -L * s * 0.4;
+        const heightY = -H * s;
+
+        const FBL = [cx - widthX / 2, cy];
+        const FBR = [cx + widthX / 2, cy];
+        const BBL = [FBL[0] + lengthX, FBL[1] + lengthY3d];
+        const BBR = [FBR[0] + lengthX, FBR[1] + lengthY3d];
+
+        const FTL = [FBL[0], FBL[1] + heightY];
+        const FTR = [FBR[0], FBR[1] + heightY];
+        const BTL = [BBL[0], BBL[1] + heightY];
+        const BTR = [BBR[0], BBR[1] + heightY];
+
+        // Faces + edges (front/back + roof surfaces)
+        setPoints(faceLeft, [FBL, BBL, BTL, FTL]);
+        setPoints(faceRight, [FBR, BBR, BTR, FTR]);
+        setPoints(edgesFront, [FBL, FBR, FTR, FTL, FBL]);
+        setPoints(edgesBack, [BBL, BBR, BTR, BTL, BBL]);
+
+        edgeLeftVertical.setAttribute("x1", FBL[0]);
+        edgeLeftVertical.setAttribute("y1", FBL[1]);
+        edgeLeftVertical.setAttribute("x2", FTL[0]);
+        edgeLeftVertical.setAttribute("y2", FTL[1]);
+        edgeRightVertical.setAttribute("x1", FBR[0]);
+        edgeRightVertical.setAttribute("y1", FBR[1]);
+        edgeRightVertical.setAttribute("x2", FTR[0]);
+        edgeRightVertical.setAttribute("y2", FTR[1]);
+
+        const buildingType = form.elements["building_type"]?.value || "";
+        if (ridgeLine) ridgeLine.style.visibility = "hidden";
+        if (leanGroup) leanGroup.style.visibility = "hidden";
+
+        if (buildingType === "Apex") {
+          // two pitched roof planes meeting at a center ridge
+          const ridgeOffset = H * s * 0.25;
+          const frontRidge = {
+            x: (FTL[0] + FTR[0]) / 2,
+            y: (FTL[1] + FTR[1]) / 2 - ridgeOffset
+          };
+          const backRidge = {
+            x: (BTL[0] + BTR[0]) / 2,
+            y: (BTL[1] + BTR[1]) / 2 - ridgeOffset
+          };
+          setPoints(roof1, [FTL, BTL, [backRidge.x, backRidge.y], [frontRidge.x, frontRidge.y]]);
+          setPoints(roof2, [FTR, BTR, [backRidge.x, backRidge.y], [frontRidge.x, frontRidge.y]]);
+          if (ridgeLine) {
+            ridgeLine.style.visibility = "visible";
+            ridgeLine.setAttribute("x1", frontRidge.x);
+            ridgeLine.setAttribute("y1", frontRidge.y);
+            ridgeLine.setAttribute("x2", backRidge.x);
+            ridgeLine.setAttribute("y2", backRidge.y);
+          }
+        } else if (buildingType === "Mono-pitch") {
+          // single plane roof rising left to right
+          const roofRise = H * s * 0.25;
+          const FTR_high = [FTR[0], FTR[1] - roofRise];
+          const BTR_high = [BTR[0], BTR[1] - roofRise];
+          setPoints(roof1, [FTL, FTR_high, BTR_high, BTL]);
+          setPoints(roof2, [FTR_high, FTR, BTR, BTR_high]);
+        } else if (buildingType === "Lean-to") {
+          // base rectangle plus a slimmer attached lean-to on the right
+          setPoints(roof1, [FTL, FTR, BTR, BTL]);
+          setPoints(roof2, [FTL, FTR, BTR, BTL]);
+
+          const extWidth = widthX * 0.5;
+          const extHeight = H * s * 0.6;
+          const eFBL = [FBR[0], FBR[1]];
+          const eFBR = [FBR[0] + extWidth, FBR[1]];
+          const eBBL = [BBR[0], BBR[1]];
+          const eBBR = [BBR[0] + extWidth, BBR[1]];
+          const eFTL = [eFBL[0], eFBL[1] - extHeight];
+          const eFTR = [eFBR[0], eFBR[1] - extHeight * 0.5];
+          const eBTL = [eBBL[0], eBBL[1] - extHeight];
+          const eBTR = [eBBR[0], eBBR[1] - extHeight * 0.5];
+
+          if (leanGroup) {
+            leanGroup.style.visibility = "visible";
+            setPoints(leanWall, [eFBL, eBBL, eBTL, eFTL]);
+            setPoints(leanRoof, [eFTL, eFTR, eBTR, eBTL]);
+            setPoints(leanEdges, [eFBL, eFBR, eFTR, eFTL, eFBL, eBBL, eBTR, eBBR]);
+          }
+        } else {
+          // Freestanding / Other
+          setPoints(roof1, [FTL, FTR, BTR, BTL]);
+          setPoints(roof2, [FTL, FTR, BTR, BTL]);
+        }
+
+        /* DIMENSIONS -------------------------------------------------- */
+        const gap = 4;
+
+        // WIDTH (front edge, horizontal)
+        const widthY = FBL[1] + 10;
+        dimWidthExtL.setAttribute("x1", FBL[0]);
+        dimWidthExtL.setAttribute("y1", FBL[1] + gap);
+        dimWidthExtL.setAttribute("x2", FBL[0]);
+        dimWidthExtL.setAttribute("y2", widthY);
+        dimWidthExtR.setAttribute("x1", FBR[0]);
+        dimWidthExtR.setAttribute("y1", FBR[1] + gap);
+        dimWidthExtR.setAttribute("x2", FBR[0]);
+        dimWidthExtR.setAttribute("y2", widthY);
+        dimWidthLine.setAttribute("x1", FBL[0]);
+        dimWidthLine.setAttribute("y1", widthY);
+        dimWidthLine.setAttribute("x2", FBR[0]);
+        dimWidthLine.setAttribute("y2", widthY);
+        dimWidthText.setAttribute("x", (FBL[0] + FBR[0]) / 2);
+        dimWidthText.setAttribute("y", widthY + 10);
+        dimWidthText.textContent =
+          rawW > 0 ? `${rawW}${unitShort ? " " + unitShort : ""}` : "Width";
+
+        // LENGTH (horizontal line offset to the right, extensions go sideways instead of down)
+        const lengthOffset = 12;
+        const lenStartX = FBR[0] + lengthOffset;
+        const lenEndX = BBR[0] + lengthOffset;
+
+        // Push both extension lines out horizontally from their respective corners
+        dimLengthExtF.setAttribute("x1", FBR[0]);
+        dimLengthExtF.setAttribute("y1", FBR[1]);
+        dimLengthExtF.setAttribute("x2", lenStartX);
+        dimLengthExtF.setAttribute("y2", FBR[1]);
+
+        dimLengthExtB.setAttribute("x1", BBR[0]);
+        dimLengthExtB.setAttribute("y1", BBR[1]);
+        dimLengthExtB.setAttribute("x2", lenEndX);
+        dimLengthExtB.setAttribute("y2", BBR[1]);
+
+        // Connect the two offset points
+        dimLengthLine.setAttribute("x1", lenStartX);
+        dimLengthLine.setAttribute("y1", FBR[1]);
+        dimLengthLine.setAttribute("x2", lenEndX);
+        dimLengthLine.setAttribute("y2", BBR[1]);
+
+        dimLengthText.setAttribute("x", (lenStartX + lenEndX) / 2);
+        // move the label to the right of the line (further from the building)
+        dimLengthText.setAttribute("y", (FBR[1] + BBR[1]) / 2 + 12);
+        dimLengthText.setAttribute("dominant-baseline", "middle");
+        dimLengthText.textContent =
+          rawL > 0 ? `${rawL}${unitShort ? " " + unitShort : ""}` : "Length";
+
+        // HEIGHT (left, text outside)
+        const hX = FBL[0] - 18;
+        dimHeightLine.setAttribute("x1", hX);
+        dimHeightLine.setAttribute("y1", FBL[1]);
+        dimHeightLine.setAttribute("x2", hX);
+        dimHeightLine.setAttribute("y2", FTL[1]);
+        dimHeightExtB.setAttribute("x1", FBL[0] - gap);
+        dimHeightExtB.setAttribute("y1", FBL[1]);
+        dimHeightExtB.setAttribute("x2", hX);
+        dimHeightExtB.setAttribute("y2", FBL[1]);
+        dimHeightExtT.setAttribute("x1", FTL[0] - gap);
+        dimHeightExtT.setAttribute("y1", FTL[1]);
+        dimHeightExtT.setAttribute("x2", hX);
+        dimHeightExtT.setAttribute("y2", FTL[1]);
+        dimHeightText.setAttribute("x", hX - 6);
+        dimHeightText.setAttribute("y", (FBL[1] + FTL[1]) / 2);
+        dimHeightText.textContent =
+          rawH > 0 ? `${rawH}${unitShort ? " " + unitShort : ""}` : "Height";
+      }
+
+      /* SUMMARY ------------------------------------------------------ */
+      function getVal(name) {
+        const el = form.elements[name];
+        if (!el || el.value == null) return "";
+        return el.value;
+      }
+
+      function updateSummary() {
+        const units = getVal("units");
+        const length = getVal("length");
+        const width = getVal("width");
+        const height = getVal("height");
+
+        document.getElementById("summarySupply").textContent =
+          getVal("supply_option") || "Not selected yet";
+        document.getElementById("summaryDivision").textContent =
+          getVal("division") || "Not chosen yet";
+        document.getElementById("summaryUse").textContent =
+          getVal("proposed_use") || "Not set";
+
+        document.getElementById("summarySize").textContent =
+          length && width && height
+            ? `${length} × ${width} × ${height}${units ? " " + units : ""}`
+            : "Sizing to be confirmed";
+
+        const roofVal = getVal("roof_material");
+        const roofCustom = getVal("roof_material_custom");
+        document.getElementById("summaryRoof").textContent =
+          roofVal
+            ? isOtherMaterial(roofVal) && roofCustom
+              ? `${roofVal}: ${roofCustom}`
+              : roofVal
+            : "To be confirmed";
+        updateRoofSummaryVisual(roofVal);
+
+        const wallVal = getVal("wall_material");
+        const wallCustom = getVal("wall_material_custom");
+        document.getElementById("summaryWall").textContent =
+          wallVal
+            ? isOtherMaterial(wallVal) && wallCustom
+              ? `${wallVal}: ${wallCustom}`
+              : wallVal
+            : "To be confirmed";
+
+        const locationPieces = [];
+        const postcode = getVal("site_postcode");
+        if (postcode) locationPieces.push(postcode);
+        const siteSetting = getVal("site_setting");
+        if (siteSetting) locationPieces.push("Setting noted");
+        document.getElementById("summaryLocation").textContent =
+          locationPieces.length ? locationPieces.join(" · ") : "Location details not added yet";
+
+        const first = getVal("first_name");
+        const last = getVal("last_name");
+        const email = getVal("email");
+        document.getElementById("summaryContact").textContent =
+          first || last || email
+            ? `${[first, last].filter(Boolean).join(" ")}${email ? " · " + email : ""}`
+            : "Contact details not entered yet";
+
+        updatePreview();
+      }
+
+      // Any input/change in the form updates summary + preview
+      form.addEventListener("input", updateSummary);
+      form.addEventListener("change", updateSummary);
+
+      function setSubmitMessage(text, type) {
+        if (!submitMessage) return;
+        submitMessage.textContent = text || "";
+        submitMessage.classList.remove(
+          "qb-submit-message-success",
+          "qb-submit-message-error"
+        );
+        if (type === "success") submitMessage.classList.add("qb-submit-message-success");
+        if (type === "error") submitMessage.classList.add("qb-submit-message-error");
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        updateSummary();
+        if (!submitButton) return;
+        if (submitButton.disabled) return;
+
+        submitButton.disabled = true;
+        const originalLabel = submitButton.textContent;
+        submitButton.textContent = "Sending...";
+        setSubmitMessage("Submitting your request...", "");
+
+        try {
+          const response = await fetch(form.action || "/quote", {
+            method: "POST",
+            body: new FormData(form),
+            headers: { Accept: "application/json" },
+          });
+
+          const rawText = await response.text();
+          const payload = (() => {
+            try {
+              return rawText ? JSON.parse(rawText) : {};
+            } catch (_err) {
+              return {};
+            }
+          })();
+          const textFallback = rawText ? rawText.trim().slice(0, 180) : "";
+          const message =
+            payload && payload.message
+              ? payload.message
+              : response.ok
+              ? "Thanks! Your quote request has been sent."
+              : textFallback || "Sorry, something went wrong sending your request.";
+
+          if (response.ok) {
+            const reference = payload && payload.reference ? String(payload.reference) : "";
+            const destination = reference
+              ? `/thank-you?reference=${encodeURIComponent(reference)}`
+              : "/thank-you";
+            window.location.href = destination;
+            return;
+          }
+
+          setSubmitMessage(message, "error");
+        } catch (_error) {
+          setSubmitMessage(
+            "Could not send your request right now. Please try again.",
+            "error"
+          );
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = originalLabel;
+        }
+      });
+
+      // Initialise
+      syncOtherMaterialFields();
+      renderRoofGallery();
+      renderWallGallery();
+      updateSummary();
+    })();
+  </script>
+</body>
+</html>
