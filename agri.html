@@ -349,9 +349,7 @@
             <div class="qb-step-title"><span>STEP 1</span> Project overview</div>
             <div class="qb-grid qb-grid-2">
               <div class="qb-field qb-field-full">
-                <label class="qb-label">
-                  Package required <span><span class="qb-required">*</span> choose one</span>
-                </label>
+                <label class="qb-label">Package required</label>
                 <div class="qb-choice-row qb-choice-row-horizontal">
                   <button type="button" class="qb-chip" data-chip="supply" data-value="Supply only">
                     <span class="qb-chip-dot"></span> Supply only
@@ -367,24 +365,20 @@
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Division <span><span class="qb-required">*</span> e.g. agricultural, industrial</span>
-                </label>
+                <label class="qb-label">Division</label>
                 <div class="qb-choice-row">
                   <button type="button" class="qb-chip" data-chip="division" data-value="Agricultural">
                     <span class="qb-chip-dot"></span> Agricultural
                   </button>
-                  <button type="button" class="qb-chip" data-chip="division" data-value="Structural / Industrial">
-                    <span class="qb-chip-dot"></span> Structural / Industrial
+                  <button type="button" class="qb-chip" data-chip="division" data-value="Industrial">
+                    <span class="qb-chip-dot"></span> Industrial
                   </button>
                 </div>
                 <input type="hidden" name="division" id="divisionInput" required />
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Proposed use <span><span class="qb-required">*</span> main purpose of the building</span>
-                </label>
+                <label class="qb-label">Proposed use</label>
                 <input
                   type="text"
                   name="proposed_use"
@@ -395,23 +389,18 @@
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Building type <span><span class="qb-required">*</span></span>
-                </label>
+                <label class="qb-label">Building type</label>
                 <select name="building_type" class="qb-select" required>
                   <option value="">Select an option</option>
                   <option>Freestanding</option>
                   <option>Apex</option>
                   <option>Mono-pitch</option>
                   <option>Lean-to</option>
-                  <option>Other / not sure</option>
                 </select>
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Measurement units <span><span class="qb-required">*</span></span>
-                </label>
+                <label class="qb-label">Measurement units</label>
                 <div class="qb-choice-row">
                   <button type="button" class="qb-chip" data-chip="units" data-value="Metres">
                     <span class="qb-chip-dot"></span> Metres
@@ -424,23 +413,17 @@
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Length <span><span class="qb-required">*</span></span>
-                </label>
+                <label class="qb-label">Length</label>
                 <input type="number" step="0.01" min="0" name="length" class="qb-input" placeholder="e.g. 40" required />
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Width <span><span class="qb-required">*</span></span>
-                </label>
+                <label class="qb-label">Width</label>
                 <input type="number" step="0.01" min="0" name="width" class="qb-input" placeholder="e.g. 30" required />
               </div>
 
               <div class="qb-field">
-                <label class="qb-label">
-                  Height <span><span class="qb-required">*</span></span>
-                </label>
+                <label class="qb-label">Height</label>
                 <input type="number" step="0.01" min="0" name="height" class="qb-input" placeholder="e.g. 12" required />
               </div>
 
@@ -455,7 +438,7 @@
             </div>
 
             <div class="qb-note">
-              Not sure on all the details? That’s fine – complete what you can and we’ll discuss the rest with you.
+              This is for you to get thinking about the type of agricultural building you can have and get a price based on that spec.
             </div>
 
             <div class="qb-actions">
@@ -478,7 +461,7 @@
                   <option value="">Select</option>
                   <option>Galvanised</option>
                   <option>Painted</option>
-                  <option>Not sure – please advise</option>
+                  <option>Price for both</option>
                 </select>
                 <div class="qb-help">
                   Galvanising gives a long-life, low-maintenance finish – ideal for exposed sites.
@@ -492,10 +475,8 @@
                 <select name="roof_material" class="qb-select" required>
                   <option value="">Select</option>
                   <option>Fibre cement - natural</option>
-                  <option>Steel - single skin</option>
-                  <option>Steel - anti-condensation</option>
-                  <option>Composite / insulated panel</option>
-                  <option>Other / to be confirmed</option>
+                  <option>Single skin cladding</option>
+                  <option>Composite cladding</option>
                 </select>
               </div>
               <div class="qb-field qb-hidden" id="roofOtherField">
@@ -526,12 +507,9 @@
                 </label>
                 <select name="wall_material" class="qb-select" required>
                   <option value="">Select</option>
-                  <option>Steel - single skin</option>
-                  <option>Steel - anti-condensation</option>
-                  <option>Composite / insulated panel</option>
+                  <option>Single skin cladding</option>
+                  <option>Composite cladding</option>
                   <option>Fibre cement - natural</option>
-                  <option>Timber boarding</option>
-                  <option>Other / to be confirmed</option>
                 </select>
               </div>
               <div class="qb-field qb-hidden" id="wallOtherField">
@@ -573,8 +551,8 @@
 
               <div class="qb-field">
                 <label class="qb-label">
-                  External cladding
-                  <span>optional</span>
+                  Additional comments for cladding
+                  <span>If you want to comment on any other things about the cladding for your building</span>
                 </label>
                 <textarea name="cladding" class="qb-textarea"
                   placeholder="Preferred finish (e.g. box profile, Yorkshire boarding), open bays, ventilation, etc."></textarea>
@@ -751,8 +729,8 @@
 
               <div class="qb-field">
                 <label class="qb-label">
-                  Return date
-                  <span>optional</span>
+                  When you require quote back
+                  <span>We will try our best to accomodate this return date but we will contact you if the date is not achievable</span>
                 </label>
                 <input type="date" name="return_date" class="qb-input" />
               </div>
@@ -1019,28 +997,16 @@
           image: "assets/fibre-cement-roof-panel.png?v=1"
         },
         {
-          match: "Steel - single skin",
-          label: "Steel - single skin",
+          match: "Single skin cladding",
+          label: "Single skin cladding",
           note: "Cost-effective profiled steel sheeting with visible fasteners.",
-          image: "https://images.unsplash.com/photo-1503389152951-9f343605f61e?auto=format&fit=crop&w=1200&q=80"
+          image: "assets/single-skin-roof-cladding.png?v=1"
         },
         {
-          match: "Steel - anti-condensation",
-          label: "Steel - anti-condensation",
-          note: "Single skin steel with anti-condensation lining on the underside.",
-          image: "https://images.unsplash.com/photo-1504306662149-1b9a983f4710?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          match: "Composite / insulated panel",
-          label: "Composite / insulated panel",
-          note: "Insulated sandwich panels for warm roof build-ups.",
-          image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          match: "Other",
-          label: "Other / custom",
-          note: "Select this and type your preferred roof material below.",
-          image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80"
+          match: "Composite cladding",
+          label: "Composite cladding",
+          note: "Composite cladding panels for warm roof build-ups.",
+          image: "assets/composite-cladding.png?v=1"
         }
       ]
         .map((item) => ({ ...item, value: findRoofOption(item.match) }))
@@ -1048,40 +1014,22 @@
 
       const wallGalleryData = [
         {
-          match: "Steel - single skin",
-          label: "Steel - single skin",
-          note: "Profiled steel cladding for cost-effective walling.",
-          image: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          match: "Steel - anti-condensation",
-          label: "Steel - anti-condensation",
-          note: "Single skin steel with anti-condensation liner.",
-          image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          match: "Composite / insulated panel",
-          label: "Composite / insulated panel",
-          note: "Insulated panels for improved thermal performance.",
-          image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
           match: "Fibre cement",
           label: "Fibre cement",
           note: "Traditional, low-glare finish for rural settings.",
-          image: "assets/fibre-cement-roof-panel.png?v=1"
+          image: "assets/fibre-cement-wall-cladding.png?v=1"
         },
         {
-          match: "Timber",
-          label: "Timber boarding",
-          note: "Natural timber cladding for softer visual impact.",
-          image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+          match: "Single skin cladding",
+          label: "Single skin cladding",
+          note: "Profiled steel cladding for cost-effective walling.",
+          image: "assets/single-skin-wall-cladding-latest.png?v=1"
         },
         {
-          match: "Other",
-          label: "Other / custom",
-          note: "Select this and type your preferred wall material below.",
-          image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80"
+          match: "Composite cladding",
+          label: "Composite cladding",
+          note: "Composite cladding panels for improved thermal performance.",
+          image: "assets/composite-wall-cladding.png?v=1"
         }
       ]
         .map((item) => ({ ...item, value: findWallOption(item.match) }))
@@ -1701,3 +1649,4 @@
   </script>
 </body>
 </html>
+
