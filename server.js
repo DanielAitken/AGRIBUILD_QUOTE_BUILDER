@@ -32,6 +32,11 @@ function firstDefined(...values) {
   return "";
 }
 
+const submissionsRoot = firstDefined(
+  process.env.SUBMISSIONS_DIR,
+  path.join(__dirname, "submissions")
+);
+
 function formatField(label, value) {
   if (!value) return `${label}:`;
   return `${label}: ${value}`;
@@ -59,7 +64,6 @@ function safeFilename(value) {
 }
 
 async function saveSubmission({ body, files, lines, pdfBuffer }) {
-  const submissionsRoot = path.join(__dirname, "submissions");
   const submissionId = `${new Date().toISOString().replace(/[:.]/g, "-")}-${crypto
     .randomBytes(3)
     .toString("hex")}`;

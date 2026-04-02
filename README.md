@@ -40,6 +40,7 @@ Optional SMTP fallback (if Graph is not configured):
 - `SMTP_USER`
 - `SMTP_PASS`
 - `SMTP_FROM`
+- `SUBMISSIONS_DIR` (optional, defaults to `./submissions`; set this on Render to a disk mount such as `/var/data/submissions`)
 
 ## 3. Make it public (shareable link)
 
@@ -53,6 +54,14 @@ Deploy to a Node host such as Render/Railway:
 6. Deploy.
 
 After deploy, you will get a public URL (for example `https://your-app.onrender.com/`) that you can share with customers.
+
+### Render notes
+
+- A ready-to-use [`render.yaml`](./render.yaml) is included.
+- Render needs persistent storage for uploaded files and generated PDFs. This project supports that with `SUBMISSIONS_DIR`.
+- The included `render.yaml` mounts a disk at `/var/data/submissions` and sets `SUBMISSIONS_DIR` to that path.
+- In Render, add your real email settings for `FORWARD_TO`, `APP_MAILBOX`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM`.
+- If you use Microsoft 365 SMTP, leave `SMTP_HOST=smtp.office365.com`, `SMTP_PORT=587`, and `SMTP_SECURE=false`.
 
 ## 4. How submissions work
 
