@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Steel Building Quote Builder</title>
+  <title>KR AgriBuild | Agricultural Building Quote Builder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Build a tailored quote request for a durable, custom agricultural building from KR AgriBuild." />
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap");
     :root {
@@ -24,7 +25,7 @@
     }
     body {
       margin: 0;
-      padding: 1.5rem;
+      padding: 0 1.5rem 2rem;
       background:
         radial-gradient(circle at 10% -10%, rgba(27, 47, 107, 0.08), transparent 45%),
         radial-gradient(circle at 100% 0%, rgba(10, 143, 68, 0.08), transparent 40%),
@@ -32,7 +33,38 @@
       color: var(--qb-text-main);
     }
     /* Simple centered wrapper so the card stays at a readable width */
-    .qb-wrapper { max-width: 1100px; margin: 0 auto; }
+    .qb-wrapper { max-width: 1160px; margin: 0 auto; }
+    .qb-site-header{
+      min-height:76px; display:flex; align-items:center; justify-content:space-between;
+      gap:1.5rem; padding:0.9rem 1.15rem; margin:0 -1.5rem;
+      background:#13285f; color:#fff; box-shadow:0 8px 24px rgba(11,18,36,0.15);
+    }
+    .qb-brand-link{ display:inline-flex; align-items:center; min-width:170px; }
+    .qb-brand-logo{ display:block; width:210px; max-width:45vw; height:48px; object-fit:contain; object-position:left center; }
+    .qb-site-contact{ display:flex; align-items:center; gap:1rem; font-size:0.82rem; }
+    .qb-site-contact a{ color:#fff; text-decoration:none; font-weight:600; }
+    .qb-site-contact a:hover{ text-decoration:underline; }
+    .qb-hero{
+      position:relative; overflow:hidden; margin:1.5rem 0 1rem; padding:2rem 2.1rem;
+      border-radius:18px; color:#fff;
+      background:linear-gradient(120deg,#13285f 0%,#1b2f6b 58%,#0a7f43 140%);
+      box-shadow:0 18px 40px rgba(19,40,95,0.2);
+    }
+    .qb-hero::after{
+      content:""; position:absolute; width:320px; height:320px; right:-100px; top:-180px;
+      border:56px solid rgba(255,255,255,0.06); border-radius:50%;
+    }
+    .qb-hero-content{ position:relative; z-index:1; max-width:760px; }
+    .qb-eyebrow{ color:#7fd29d; font:700 0.73rem/1.2 "Montserrat",sans-serif; letter-spacing:0.14em; text-transform:uppercase; }
+    .qb-hero h1{ margin:0.5rem 0 0.7rem; font:700 clamp(1.75rem,4vw,2.8rem)/1.08 "Montserrat",sans-serif; text-transform:uppercase; }
+    .qb-hero p{ max-width:680px; margin:0; color:#e4eaf7; font-size:1rem; line-height:1.6; }
+    .qb-trust-row{ display:flex; flex-wrap:wrap; gap:0.55rem; margin-top:1.15rem; }
+    .qb-trust-item{
+      display:inline-flex; align-items:center; gap:0.4rem; padding:0.4rem 0.7rem;
+      border:1px solid rgba(255,255,255,0.22); border-radius:999px;
+      background:rgba(255,255,255,0.08); font-size:0.76rem; font-weight:600;
+    }
+    .qb-trust-item::before{ content:"✓"; color:#7fd29d; font-weight:700; }
     .qb-card {
       background: var(--qb-card-bg);
       border-radius: 18px;
@@ -58,7 +90,7 @@
       background:#e5e7eb; overflow:hidden;
     }
     .qb-progress-fill {
-      position:absolute; inset:0; width:25%;
+      position:absolute; inset:0; width:20%;
       background:linear-gradient(90deg,#0a8f44,#1b2f6b);
       border-radius:999px; transition:width 0.25s ease-out;
     }
@@ -292,7 +324,7 @@
     }
     .qb-roof-summary-copy{ display:flex; flex-direction:column; gap:0.1rem; }
     .qb-roof-summary-label{ font-size:0.72rem; color:#9ca3af; text-transform:uppercase; letter-spacing:0.02em; }
-    .qb-roof-summary-name{ font-size:0.88rem; font-weight:600; color:#e2e8f0; }
+    .qb-roof-summary-name{ font-size:0.88rem; font-weight:600; color:var(--qb-text-main); }
     .qb-roof-modal-backdrop{
       position:fixed; inset:0; background:rgba(15,23,42,0.65); display:none;
       align-items:center; justify-content:center; z-index:9999; padding:1.5rem;
@@ -315,26 +347,92 @@
       padding:0.25rem 0.45rem; border-radius:8px; transition:background 0.15s ease, color 0.15s ease;
     }
     .qb-roof-modal-close:hover{ background:rgba(148,163,184,0.2); color:#e2e8f0; }
+    .qb-review-intro{ margin:-0.25rem 0 1rem; color:var(--qb-text-muted); font-size:0.86rem; line-height:1.5; }
+    .qb-review-grid{ display:grid; grid-template-columns:1fr; gap:0.8rem; }
+    .qb-review-card{ border:1px solid var(--qb-border); border-radius:14px; background:#f9fafb; overflow:hidden; }
+    .qb-review-card-header{
+      display:flex; align-items:center; justify-content:space-between; gap:0.75rem;
+      padding:0.75rem 0.9rem; background:#eef2f8; border-bottom:1px solid var(--qb-border);
+    }
+    .qb-review-card h3{ margin:0; color:var(--qb-primary); font:700 0.84rem/1.3 "Montserrat",sans-serif; text-transform:uppercase; letter-spacing:0.03em; }
+    .qb-review-edit{ border:0; background:transparent; color:var(--qb-accent); font-size:0.78rem; font-weight:700; cursor:pointer; }
+    .qb-review-edit:hover{ text-decoration:underline; }
+    .qb-review-list{ margin:0; padding:0.45rem 0.9rem; }
+    .qb-review-row{ display:grid; grid-template-columns:minmax(110px,0.8fr) minmax(0,1.2fr); gap:0.75rem; padding:0.42rem 0; border-bottom:1px solid #e5e7eb; }
+    .qb-review-row:last-child{ border-bottom:0; }
+    .qb-review-label{ color:var(--qb-text-muted); font-size:0.76rem; }
+    .qb-review-value{ color:var(--qb-text-main); font-size:0.79rem; font-weight:600; text-align:right; overflow-wrap:anywhere; }
+    .qb-review-empty{ padding:0.75rem 0; color:var(--qb-text-muted); font-size:0.78rem; }
+    @media(min-width:720px){ .qb-review-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    .qb-confidence{
+      margin-top:1.2rem; padding:1.5rem; border-radius:18px;
+      background:#13285f; color:#fff; box-shadow:0 16px 36px rgba(19,40,95,0.18);
+    }
+    .qb-confidence-heading{ display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; margin-bottom:1rem; }
+    .qb-confidence h2{ margin:0.25rem 0 0; font:700 1.35rem/1.2 "Montserrat",sans-serif; text-transform:uppercase; }
+    .qb-confidence-heading p{ margin:0; max-width:520px; color:#cbd5e1; font-size:0.84rem; line-height:1.5; }
+    .qb-confidence-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0.8rem; }
+    .qb-confidence-card{ padding:1rem; border:1px solid rgba(255,255,255,0.15); border-radius:14px; background:rgba(255,255,255,0.07); }
+    .qb-confidence-card strong{ display:block; color:#7fd29d; font:700 0.88rem/1.3 "Montserrat",sans-serif; text-transform:uppercase; }
+    .qb-confidence-card span{ display:block; margin-top:0.35rem; color:#e2e8f0; font-size:0.78rem; line-height:1.5; }
+    .qb-footer{ display:flex; justify-content:space-between; gap:1rem; padding:1.1rem 0.2rem 0; color:#5b6475; font-size:0.75rem; }
+    .qb-footer a{ color:#1b2f6b; text-decoration:none; font-weight:600; }
+    @media(max-width:700px){
+      body{ padding:0 0.8rem 1.5rem; }
+      .qb-site-header{ margin:0 -0.8rem; padding:0.75rem 0.8rem; }
+      .qb-site-contact{ flex-direction:column; align-items:flex-end; gap:0.15rem; font-size:0.72rem; }
+      .qb-hero{ padding:1.45rem 1.2rem; }
+      .qb-heading-row,.qb-confidence-heading,.qb-footer{ align-items:flex-start; flex-direction:column; }
+      .qb-badge{ white-space:normal; }
+      .qb-confidence-grid{ grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
   <div class="qb-wrapper">
+    <header class="qb-site-header">
+      <a class="qb-brand-link" href="https://krgrp.co.uk/agricultural-building-solutions/" aria-label="KR AgriBuild website">
+        <img class="qb-brand-logo" src="https://krgrp.co.uk/wp-content/uploads/2025/09/KR-AgriBuild-Landing-Page-Logo.png" alt="KR AgriBuild" />
+      </a>
+      <div class="qb-site-contact">
+        <a href="tel:01358788907">01358 788907</a>
+        <a href="mailto:info@krgrp.co.uk">info@krgrp.co.uk</a>
+      </div>
+    </header>
+
+    <section class="qb-hero" aria-labelledby="qbHeroTitle">
+      <div class="qb-hero-content">
+        <div class="qb-eyebrow">Agricultural building solutions</div>
+        <h1 id="qbHeroTitle">Your farm. Your shed. Your way.</h1>
+        <p>
+          Tell us what your farm needs and build a clear project brief for a durable,
+          custom steel-framed building designed around your operation.
+        </p>
+        <div class="qb-trust-row" aria-label="Why choose KR AgriBuild">
+          <span class="qb-trust-item">Over 20 years of experience</span>
+          <span class="qb-trust-item">Family-run with farming roots</span>
+          <span class="qb-trust-item">Design through to installation</span>
+          <span class="qb-trust-item">Built for tough UK conditions</span>
+        </div>
+      </div>
+    </section>
+
     <form id="quoteBuilderForm" class="qb-card" action="/quote" method="post" enctype="multipart/form-data">
       <div class="qb-header">
         <div class="qb-heading-row">
           <div>
-            <div class="qb-title">Steel Building Quote Builder</div>
+            <div class="qb-title">Build your project quote</div>
             <div class="qb-subtitle">
-              Answer a few quick questions about your project and we’ll prepare a tailored quotation.
+              Share your requirements and our agricultural building team will prepare a tailored proposal.
             </div>
           </div>
-          <div class="qb-badge">Average completion: 2–3 minutes</div>
+          <div class="qb-badge">Free, no-obligation quote</div>
         </div>
         <div class="qb-progress-bar">
           <div class="qb-progress-fill" id="qbProgressFill"></div>
         </div>
         <div class="qb-steps-labels">
-          <span>1. Project</span><span>2. Specification</span><span>3. Site &amp; planning</span><span>4. Contact</span>
+          <span>1. Project</span><span>2. Specification</span><span>3. Site</span><span>4. Contact</span><span>5. Review</span>
         </div>
       </div>
 
@@ -389,10 +487,11 @@
                 <label class="qb-label">Building type</label>
                 <select name="building_type" class="qb-select" required>
                   <option value="">Select an option</option>
-                  <option>Freestanding</option>
-                  <option>Apex</option>
-                  <option>Mono-pitch</option>
-                  <option>Lean-to</option>
+                  <option value="Portal">Portal</option>
+                  <option value="Monopitch">Monopitch</option>
+                  <option value="Freestanding">Freestanding</option>
+                  <option value="Lean to">Lean to</option>
+                  <option value="Extension">Extension</option>
                 </select>
               </div>
 
@@ -409,19 +508,52 @@
                 <input type="hidden" name="units" id="unitsInput" required />
               </div>
 
-              <div class="qb-field">
+              <div class="qb-field" id="lengthField">
                 <label class="qb-label">Length</label>
                 <input type="number" step="0.01" min="0" name="length" class="qb-input" placeholder="e.g. 40" required />
               </div>
 
-              <div class="qb-field">
+              <div class="qb-field" id="widthField">
                 <label class="qb-label">Width</label>
                 <input type="number" step="0.01" min="0" name="width" class="qb-input" placeholder="e.g. 30" required />
               </div>
 
-              <div class="qb-field">
-                <label class="qb-label">Height</label>
+              <div class="qb-field" id="eavesHeightField">
+                <label class="qb-label">Height to eaves (He)</label>
                 <input type="number" step="0.01" min="0" name="height" class="qb-input" placeholder="e.g. 12" required />
+              </div>
+
+              <div class="qb-field" id="lowEavesField" style="display:none;">
+                <label class="qb-label">Low eaves height (Hl)</label>
+                <input type="number" step="0.01" min="0" name="height_low" class="qb-input" placeholder="e.g. 8" />
+                <div class="qb-help">Height at the lower end of the roof slope.</div>
+              </div>
+
+              <div class="qb-field" id="highEavesField" style="display:none;">
+                <label class="qb-label">High eaves height (Hh)</label>
+                <input type="number" step="0.01" min="0" name="height_high" class="qb-input" placeholder="e.g. 14" />
+                <div class="qb-help">Height at the higher end of the roof slope.</div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Roof pitch (α)
+                  <span>optional</span>
+                </label>
+                <input type="number" step="0.1" min="0" max="45" name="roof_pitch" class="qb-input" placeholder="e.g. 10" />
+                <div class="qb-help">Pitch angle in degrees.</div>
+              </div>
+
+              <div class="qb-field" id="projectionField" style="display:none;">
+                <label class="qb-label">Projection/Width (P)</label>
+                <input type="number" step="0.01" min="0" name="projection" class="qb-input" placeholder="e.g. 6" />
+                <div class="qb-help">Width of the lean-to projection.</div>
+              </div>
+
+              <div class="qb-field" id="extensionLengthField" style="display:none;">
+                <label class="qb-label">Length (L)</label>
+                <input type="number" step="0.01" min="0" name="extension_length" class="qb-input" placeholder="e.g. 8" />
+                <div class="qb-help">How far the new structure projects out from the front.</div>
               </div>
 
               <div class="qb-field">
@@ -439,7 +571,7 @@
             </div>
 
             <div class="qb-actions">
-              <span class="qb-help">Step 1 of 4</span>
+              <span class="qb-help">Step 1 of 5</span>
               <div class="qb-actions-right">
                 <button type="button" class="qb-btn qb-btn-primary" data-next>Next step →</button>
               </div>
@@ -448,7 +580,7 @@
 
           <!-- STEP 2 -->
           <div class="qb-step" data-step="1">
-            <div class="qb-step-title"><span>STEP 2</span> Building specification</div>
+            <div class="qb-step-title"><span>STEP 2</span> Materials, envelope and access</div>
             <div class="qb-grid qb-grid-2">
               <div class="qb-field">
                 <label class="qb-label">
@@ -493,9 +625,9 @@
                 </label>
                 <select name="wall_material" class="qb-select" required>
                   <option value="">Select</option>
+                  <option>Fibre cement - natural</option>
                   <option>Single skin cladding</option>
                   <option>Composite cladding</option>
-                  <option>Fibre cement - natural</option>
                 </select>
               </div>
 
@@ -526,11 +658,38 @@
 
               <div class="qb-field">
                 <label class="qb-label">
-                  Additional comments for cladding
-                  <span>If you want to comment on any other things about the cladding for your building</span>
+                  Rainwater approach
+                  <span>optional</span>
+                </label>
+                <select name="rainwater_approach" class="qb-select">
+                  <option value="">Select</option>
+                  <option>Include gutters and downpipes</option>
+                  <option>Allow for a future connection</option>
+                  <option>No rainwater goods required</option>
+                  <option>Recommend the best approach</option>
+                </select>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Natural daylight
+                  <span>optional</span>
+                </label>
+                <select name="daylight_preference" class="qb-select">
+                  <option value="">Select</option>
+                  <option>Include translucent rooflights</option>
+                  <option>No rooflights required</option>
+                  <option>Recommend a suitable level</option>
+                </select>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Cladding arrangement
+                  <span>optional</span>
                 </label>
                 <textarea name="cladding" class="qb-textarea"
-                  placeholder="Preferred finish (e.g. box profile, Yorkshire boarding), open bays, ventilation, etc."></textarea>
+                  placeholder="Note any open elevations, ventilation needs, colours or preferred profiled or timber finishes."></textarea>
               </div>
 
               <div class="qb-field">
@@ -540,23 +699,23 @@
                 </label>
                 <div class="qb-choice-row">
                   <label class="qb-chip">
-                    <input type="checkbox" name="doors[]" value="Manual roller shutter" />
+                    <input type="checkbox" name="door_types" value="Manual roller shutter" />
                     <span class="qb-chip-dot"></span> Manual roller shutter
                   </label>
                   <label class="qb-chip">
-                    <input type="checkbox" name="doors[]" value="Electric roller shutter" />
+                    <input type="checkbox" name="door_types" value="Electric roller shutter" />
                     <span class="qb-chip-dot"></span> Electric roller shutter
                   </label>
                   <label class="qb-chip">
-                    <input type="checkbox" name="doors[]" value="Sliding doors" />
+                    <input type="checkbox" name="door_types" value="Sliding doors" />
                     <span class="qb-chip-dot"></span> Sliding doors
                   </label>
                   <label class="qb-chip">
-                    <input type="checkbox" name="doors[]" value="Personnel doors" />
+                    <input type="checkbox" name="door_types" value="Personnel doors" />
                     <span class="qb-chip-dot"></span> Personnel doors
                   </label>
                   <label class="qb-chip">
-                    <input type="checkbox" name="doors[]" value="Openings only" />
+                    <input type="checkbox" name="door_types" value="Openings only" />
                     <span class="qb-chip-dot"></span> Openings only
                   </label>
                 </div>
@@ -584,7 +743,7 @@
             <div class="qb-actions">
               <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
               <div class="qb-actions-right">
-                <span class="qb-help">Step 2 of 4</span>
+                <span class="qb-help">Step 2 of 5</span>
                 <button type="button" class="qb-btn qb-btn-primary" data-next>Next step →</button>
               </div>
             </div>
@@ -592,7 +751,7 @@
 
           <!-- STEP 3 -->
           <div class="qb-step" data-step="2">
-            <div class="qb-step-title"><span>STEP 3</span> Site &amp; planning</div>
+            <div class="qb-step-title"><span>STEP 3</span> Site readiness, services and programme</div>
             <div class="qb-grid qb-grid-2">
               <div class="qb-field">
                 <label class="qb-label">
@@ -636,19 +795,44 @@
 
               <div class="qb-field">
                 <label class="qb-label">
-                  Timescales
+                  Target programme
                   <span>optional</span>
                 </label>
-                <input type="text" name="timescales" class="qb-input" placeholder="Ideal start / completion dates" />
+                <input type="text" name="timescales" class="qb-input" placeholder="Ideal survey, start or completion window" />
               </div>
 
               <div class="qb-field">
                 <label class="qb-label">
-                  Groundworks &amp; concrete
+                  Additional works required
+                  <span>select all that apply</span>
+                </label>
+                <div class="qb-choice-row">
+                  <label class="qb-chip">
+                    <input type="checkbox" name="groundworks_options" value="Groundworks" />
+                    <span class="qb-chip-dot"></span> Groundworks
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="groundworks_options" value="Drainage" />
+                    <span class="qb-chip-dot"></span> Drainage
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="groundworks_options" value="Concrete works" />
+                    <span class="qb-chip-dot"></span> Concrete works
+                  </label>
+                  <label class="qb-chip">
+                    <input type="checkbox" name="groundworks_options" value="Netting" />
+                    <span class="qb-chip-dot"></span> Netting
+                  </label>
+                </div>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
+                  Additional works details
                   <span>optional</span>
                 </label>
                 <textarea name="groundworks" class="qb-textarea"
-                  placeholder="Do you need foundations, concrete floors, walls or slurry stores included?"></textarea>
+                  placeholder="Please provide any useful details, quantities or requirements."></textarea>
               </div>
 
               <div class="qb-field">
@@ -664,7 +848,7 @@
             <div class="qb-actions">
               <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
               <div class="qb-actions-right">
-                <span class="qb-help">Step 3 of 4</span>
+                <span class="qb-help">Step 3 of 5</span>
                 <button type="button" class="qb-btn qb-btn-primary" data-next>Next step →</button>
               </div>
             </div>
@@ -672,7 +856,7 @@
 
           <!-- STEP 4 -->
           <div class="qb-step" data-step="3">
-            <div class="qb-step-title"><span>STEP 4</span> Contact details &amp; drawings</div>
+            <div class="qb-step-title"><span>STEP 4</span> Your details and project files</div>
             <div class="qb-grid qb-grid-2">
               <div class="qb-field">
                 <label class="qb-label">
@@ -704,8 +888,8 @@
 
               <div class="qb-field">
                 <label class="qb-label">
-                  When you require quote back
-                  <span>We will try our best to accomodate this return date but we will contact you if the date is not achievable</span>
+                  Preferred quote response date
+                  <span>We will confirm if your requested date is not achievable</span>
                 </label>
                 <input type="date" name="return_date" class="qb-input" />
               </div>
@@ -722,13 +906,14 @@
               <div class="qb-field">
                 <label class="qb-label">
                   Drawings and site images
-                  <span>optional, up to 4 MB</span>
+                  <span>optional, select multiple files, up to 15 MB each</span>
                 </label>
                 <div class="qb-file">
-                  <input type="file" name="drawings" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+                  <input id="drawingFiles" type="file" name="drawings" accept=".pdf,.jpg,.jpeg,.png" multiple />
                   <div class="qb-small-note">
-                    Attach any sketches or plans you already have – even a rough layout is helpful.
+                    Add up to 10 drawings, sketches, plans or site images. Even rough layouts are helpful.
                   </div>
+                  <div class="qb-small-note" id="drawingFileCount" aria-live="polite">No files selected.</div>
                 </div>
               </div>
 
@@ -751,6 +936,20 @@
 
               <div class="qb-field">
                 <label class="qb-label">
+                  What would you like to happen next?
+                  <span>optional</span>
+                </label>
+                <select name="preferred_next_step" class="qb-select">
+                  <option value="">Select</option>
+                  <option>Send budget guidance</option>
+                  <option>Prepare a detailed quotation</option>
+                  <option>Arrange a site visit</option>
+                  <option>Call me to discuss the project</option>
+                </select>
+              </div>
+
+              <div class="qb-field">
+                <label class="qb-label">
                   Marketing consent
                   <span>optional</span>
                 </label>
@@ -768,13 +967,59 @@
                   We’ll never sell your details to third parties, and you can opt out at any time.
                 </div>
               </div>
+
             </div>
 
             <div class="qb-actions">
               <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
               <div class="qb-actions-right">
-                <span class="qb-help">Step 4 of 4</span>
-                <button type="submit" class="qb-btn qb-btn-primary">Submit quote request →</button>
+                <span class="qb-help">Step 4 of 5</span>
+                <button type="button" class="qb-btn qb-btn-primary" data-next>Review request →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5 -->
+          <div class="qb-step" data-step="4">
+            <div class="qb-step-title"><span>STEP 5</span> Review your quote request</div>
+            <p class="qb-review-intro">
+              Check the information below before sending it to KR AgriBuild. Empty optional answers are left out.
+            </p>
+            <div class="qb-review-grid">
+              <section class="qb-review-card">
+                <div class="qb-review-card-header">
+                  <h3>Project</h3>
+                  <button class="qb-review-edit" type="button" data-edit-step="0">Edit</button>
+                </div>
+                <div class="qb-review-list" id="reviewProject"></div>
+              </section>
+              <section class="qb-review-card">
+                <div class="qb-review-card-header">
+                  <h3>Materials &amp; access</h3>
+                  <button class="qb-review-edit" type="button" data-edit-step="1">Edit</button>
+                </div>
+                <div class="qb-review-list" id="reviewSpecification"></div>
+              </section>
+              <section class="qb-review-card">
+                <div class="qb-review-card-header">
+                  <h3>Site &amp; additional works</h3>
+                  <button class="qb-review-edit" type="button" data-edit-step="2">Edit</button>
+                </div>
+                <div class="qb-review-list" id="reviewSite"></div>
+              </section>
+              <section class="qb-review-card">
+                <div class="qb-review-card-header">
+                  <h3>Contact &amp; files</h3>
+                  <button class="qb-review-edit" type="button" data-edit-step="3">Edit</button>
+                </div>
+                <div class="qb-review-list" id="reviewContact"></div>
+              </section>
+            </div>
+            <div class="qb-actions">
+              <button type="button" class="qb-btn qb-btn-ghost" data-prev>← Back</button>
+              <div class="qb-actions-right">
+                <span class="qb-help">Step 5 of 5</span>
+                <button type="submit" class="qb-btn qb-btn-primary">Send to KR AgriBuild →</button>
               </div>
             </div>
             <div id="qbSubmitMessage" class="qb-submit-message" aria-live="polite"></div>
@@ -787,13 +1032,14 @@
             <div class="qb-summary-inner">
               <div class="qb-summary-title">
                 Project snapshot
-                <span class="qb-summary-pill" id="qbStepIndicator">Step 1 of 4</span>
+                <span class="qb-summary-pill" id="qbStepIndicator">Step 1 of 5</span>
               </div>
               <ul class="qb-summary-list">
                 <li><span class="qb-summary-label">Package</span><span class="qb-summary-value" id="summarySupply">–</span></li>
                 <li><span class="qb-summary-label">Division</span><span class="qb-summary-value" id="summaryDivision">–</span></li>
                 <li><span class="qb-summary-label">Use</span><span class="qb-summary-value" id="summaryUse">–</span></li>
                 <li><span class="qb-summary-label">Size</span><span class="qb-summary-value" id="summarySize">–</span></li>
+                <li><span class="qb-summary-label">Roof pitch</span><span class="qb-summary-value" id="summaryRoofPitch">–</span></li>
                 <li><span class="qb-summary-label">Roof</span><span class="qb-summary-value" id="summaryRoof">–</span></li>
                 <li><span class="qb-summary-label">Wall</span><span class="qb-summary-value" id="summaryWall">–</span></li>
                 <li><span class="qb-summary-label">Location</span><span class="qb-summary-value" id="summaryLocation">–</span></li>
@@ -823,14 +1069,14 @@
                 <span class="qb-summary-pill">Not to scale</span>
               </div>
 
-              <svg id="planPreview" viewBox="0 0 220 180" style="width:100%;max-width:260px;">
+              <svg id="planPreview" viewBox="0 0 400 340" style="width:100%;max-width:600px;">
                 <defs>
-                  <marker id="dimArrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                    <path d="M0,0 L6,3 L0,6 Z" fill="#9ca3af" />
+                  <marker id="dimArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                    <path d="M0,0 L8,4 L0,8 Z" fill="#9ca3af" />
                   </marker>
                 </defs>
 
-                <rect x="0" y="0" width="220" height="180" fill="#020617"></rect>
+                <rect x="0" y="0" width="400" height="340" fill="#020617"></rect>
 
                 <!-- Main box -->
                 <g id="boxGroup" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round">
@@ -856,22 +1102,45 @@
                 </g>
 
                 <!-- Dimensions -->
-                <g id="dims" stroke="#9ca3af" stroke-width="1" font-size="9" fill="#e5e7eb" stroke-linecap="round">
-                  <!-- Width -->
+                <g id="dims" stroke="#9ca3af" stroke-width="1.2" font-size="11" fill="#e5e7eb" stroke-linecap="round">
                   <line id="dimWidthExtL"></line>
                   <line id="dimWidthExtR"></line>
                   <line id="dimWidthLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimWidthText" text-anchor="middle">Width</text>
-                  <!-- Length (horizontal) -->
+                  <text id="dimWidthText" text-anchor="middle" dy="-4">W</text>
+                  <text id="dimWidthLabel" text-anchor="middle" dy="12" font-size="8">Width</text>
                   <line id="dimLengthExtF"></line>
                   <line id="dimLengthExtB"></line>
                   <line id="dimLengthLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimLengthText" text-anchor="middle">Length</text>
-                  <!-- Height (text outside on the left) -->
+                  <text id="dimLengthText" text-anchor="middle" dy="-4">L</text>
+                  <text id="dimLengthLabel" text-anchor="middle" dy="12" font-size="8">Length</text>
                   <line id="dimHeightExtB"></line>
                   <line id="dimHeightExtT"></line>
                   <line id="dimHeightLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimHeightText" text-anchor="end">Height</text>
+                  <text id="dimHeightText" text-anchor="end" dx="-6">He</text>
+                  <text id="dimHeightLabel" text-anchor="end" dx="-6" dy="12" font-size="8">Eaves</text>
+                  <line id="dimHeightLowExtB" visibility="hidden"></line>
+                  <line id="dimHeightLowExtT" visibility="hidden"></line>
+                  <line id="dimHeightLowLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimHeightLowText" text-anchor="end" dx="-6" visibility="hidden">Hl</text>
+                  <text id="dimHeightLowLabel" text-anchor="end" dx="-6" dy="12" font-size="8" visibility="hidden">Low</text>
+                  <line id="dimHeightHighExtB" visibility="hidden"></line>
+                  <line id="dimHeightHighExtT" visibility="hidden"></line>
+                  <line id="dimHeightHighLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimHeightHighText" text-anchor="end" dx="-6" visibility="hidden">Hh</text>
+                  <text id="dimHeightHighLabel" text-anchor="end" dx="-6" dy="12" font-size="8" visibility="hidden">High</text>
+                  <line id="dimProjectionExtF" visibility="hidden"></line>
+                  <line id="dimProjectionExtB" visibility="hidden"></line>
+                  <line id="dimProjectionLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimProjectionText" text-anchor="middle" dy="-4" visibility="hidden">P</text>
+                  <text id="dimProjectionLabel" text-anchor="middle" dy="12" font-size="8" visibility="hidden">Project.</text>
+                  <line id="dimExtensionExtF" visibility="hidden"></line>
+                  <line id="dimExtensionExtB" visibility="hidden"></line>
+                  <line id="dimExtensionLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
+                  <text id="dimExtensionText" text-anchor="middle" dy="-4" visibility="hidden">Le</text>
+                  <text id="dimExtensionLabel" text-anchor="middle" dy="12" font-size="8" visibility="hidden">Ext.</text>
+                  <path id="dimPitchArc" visibility="hidden" fill="none"></path>
+                  <line id="dimPitchReference" visibility="hidden"></line>
+                  <text id="dimPitchText" visibility="hidden" font-size="9">alpha</text>
                 </g>
               </svg>
 
@@ -884,6 +1153,38 @@
         </div>
       </div>
     </form>
+
+    <section class="qb-confidence" aria-labelledby="qbConfidenceTitle">
+      <div class="qb-confidence-heading">
+        <div>
+          <div class="qb-eyebrow">Built for the UK's toughest conditions</div>
+          <h2 id="qbConfidenceTitle">Practical buildings. Complete support.</h2>
+        </div>
+        <p>
+          From livestock housing and machinery sheds to grain stores, extensions and turnkey builds,
+          KR AgriBuild can support the complete project or the individual services you need.
+        </p>
+      </div>
+      <div class="qb-confidence-grid">
+        <div class="qb-confidence-card">
+          <strong>Agricultural expertise</strong>
+          <span>Purpose-built solutions for livestock, machinery, grain and crop storage.</span>
+        </div>
+        <div class="qb-confidence-card">
+          <strong>End-to-end delivery</strong>
+          <span>Planning, design, fabrication, groundworks, concrete works and installation.</span>
+        </div>
+        <div class="qb-confidence-card">
+          <strong>Built around your farm</strong>
+          <span>New buildings, repairs, upgrades and extensions tailored to how you work.</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="qb-footer">
+      <span>KR Group (Scotland) Limited · Loanhead Industrial Estate, Newburgh, Aberdeenshire, AB41 6AN</span>
+      <span><a href="https://krgrp.co.uk/privacy-policy/">Privacy policy</a> · Company SC618073</span>
+    </footer>
   </div>
 
   <div class="qb-roof-modal-backdrop" id="roofModal">
@@ -899,6 +1200,13 @@
   <script>
     (function () {
       const form = document.getElementById("quoteBuilderForm");
+      const lowEavesField = document.getElementById("lowEavesField");
+      const highEavesField = document.getElementById("highEavesField");
+      const eavesHeightField = document.getElementById("eavesHeightField");
+      const lengthField = document.getElementById("lengthField");
+      const widthField = document.getElementById("widthField");
+      const projectionField = document.getElementById("projectionField");
+      const extensionLengthField = document.getElementById("extensionLengthField");
       const steps = Array.from(document.querySelectorAll(".qb-step"));
       const progressFill = document.getElementById("qbProgressFill");
       const stepIndicator = document.getElementById("qbStepIndicator");
@@ -917,7 +1225,47 @@
       const roofModalClose = document.getElementById("roofModalClose");
       const submitButton = form.querySelector('button[type="submit"]');
       const submitMessage = document.getElementById("qbSubmitMessage");
+      const drawingFiles = document.getElementById("drawingFiles");
+      const drawingFileCount = document.getElementById("drawingFileCount");
       let currentStep = 0;
+
+      if (drawingFiles && drawingFileCount) {
+        drawingFiles.addEventListener("change", () => {
+          const count = drawingFiles.files ? drawingFiles.files.length : 0;
+          drawingFileCount.textContent = count
+            ? `${count} file${count === 1 ? "" : "s"} selected.`
+            : "No files selected.";
+        });
+      }
+
+      function updateConditionalFields() {
+        const buildingType = form.elements["building_type"]?.value || "";
+        const isMonopitch = buildingType.includes("Monopitch");
+        const isLeanTo = buildingType.includes("Lean to");
+        const isExtension = buildingType.includes("Extension");
+        const usesTwoEaves = isMonopitch || isLeanTo;
+        const heightInput = form.elements["height"];
+        const lowInput = form.elements["height_low"];
+        const highInput = form.elements["height_high"];
+        const projectionInput = form.elements["projection"];
+        const extensionInput = form.elements["extension_length"];
+        const lengthInput = form.querySelector('input[name="length"]');
+        const widthInput = form.querySelector('input[name="width"]');
+        if (lengthField) lengthField.style.display = isExtension ? "none" : "flex";
+        if (widthField) widthField.style.display = isLeanTo ? "none" : "flex";
+        if (lengthInput) lengthInput.required = !isExtension;
+        if (widthInput) widthInput.required = !isLeanTo;
+        if (eavesHeightField) eavesHeightField.style.display = usesTwoEaves ? "none" : "flex";
+        if (heightInput) heightInput.required = !usesTwoEaves;
+        if (lowInput) lowInput.required = usesTwoEaves;
+        if (highInput) highInput.required = usesTwoEaves;
+        if (projectionInput) projectionInput.required = isLeanTo;
+        if (extensionInput) extensionInput.required = isExtension;
+        if (lowEavesField) lowEavesField.style.display = usesTwoEaves ? "flex" : "none";
+        if (highEavesField) highEavesField.style.display = usesTwoEaves ? "flex" : "none";
+        if (projectionField) projectionField.style.display = isLeanTo ? "flex" : "none";
+        if (extensionLengthField) extensionLengthField.style.display = isExtension ? "flex" : "none";
+      }
 
       function findRoofOption(keyword) {
         if (!roofSelect) return "";
@@ -1102,6 +1450,111 @@
       }
 
       /* STEP NAVIGATION ---------------------------------------------- */
+      function reviewValue(name) {
+        const fields = Array.from(form.querySelectorAll(`[name="${name}"]`));
+        return fields
+          .filter((field) => !["checkbox", "radio"].includes(field.type) || field.checked)
+          .map((field) => String(field.value || "").trim())
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      function renderReviewSection(id, rows) {
+        const container = document.getElementById(id);
+        if (!container) return;
+        container.replaceChildren();
+        const visibleRows = rows.filter((row) => row[1]);
+        if (!visibleRows.length) {
+          const empty = document.createElement("div");
+          empty.className = "qb-review-empty";
+          empty.textContent = "No information supplied in this section.";
+          container.appendChild(empty);
+          return;
+        }
+        visibleRows.forEach(([label, value]) => {
+          const row = document.createElement("div");
+          row.className = "qb-review-row";
+          const labelEl = document.createElement("span");
+          labelEl.className = "qb-review-label";
+          labelEl.textContent = label;
+          const valueEl = document.createElement("span");
+          valueEl.className = "qb-review-value";
+          valueEl.textContent = value;
+          row.append(labelEl, valueEl);
+          container.appendChild(row);
+        });
+      }
+
+      function renderReview() {
+        const buildingType = reviewValue("building_type");
+        const units = reviewValue("units");
+        const length = buildingType === "Extension"
+          ? reviewValue("extension_length")
+          : reviewValue("length");
+        const width = buildingType === "Lean to"
+          ? reviewValue("projection")
+          : reviewValue("width");
+        const height = ["Monopitch", "Lean to"].includes(buildingType)
+          ? [reviewValue("height_low"), reviewValue("height_high")].filter(Boolean).join("–")
+          : reviewValue("height");
+        const sizeParts = [];
+        if (length) sizeParts.push(`${length} L`);
+        if (width) sizeParts.push(`${width} W`);
+        if (height) sizeParts.push(`${height} H`);
+        const size = sizeParts.length
+          ? `${sizeParts.join(" × ")}${units ? " " + units : ""}`
+          : "";
+        const pitch = reviewValue("roof_pitch");
+        const selectedFiles = drawingFiles && drawingFiles.files
+          ? Array.from(drawingFiles.files)
+          : [];
+        const files = selectedFiles.length
+          ? `${selectedFiles.length} file${selectedFiles.length === 1 ? "" : "s"}: ${selectedFiles.map((file) => file.name).join(", ")}`
+          : "";
+
+        renderReviewSection("reviewProject", [
+          ["Package", reviewValue("supply_option")],
+          ["Division", reviewValue("division")],
+          ["Proposed use", reviewValue("proposed_use")],
+          ["Building type", buildingType],
+          ["Size", size],
+          ["Roof pitch", pitch ? `${pitch}°` : ""],
+          ["Project notes", reviewValue("project_notes")]
+        ]);
+        renderReviewSection("reviewSpecification", [
+          ["Frame finish", reviewValue("steelwork_finish")],
+          ["Roof material", reviewValue("roof_material")],
+          ["Wall material", reviewValue("wall_material")],
+          ["Heated", reviewValue("heated")],
+          ["Rainwater", reviewValue("rainwater_approach")],
+          ["Daylight", reviewValue("daylight_preference")],
+          ["Cladding", reviewValue("cladding")],
+          ["Doors", reviewValue("door_types")],
+          ["Door details", reviewValue("door_details")],
+          ["Internal fittings", reviewValue("internal_fittings")]
+        ]);
+        renderReviewSection("reviewSite", [
+          ["Postcode", reviewValue("site_postcode")],
+          ["Site address", reviewValue("site_address")],
+          ["Site setting", reviewValue("site_setting")],
+          ["Planning", reviewValue("planning_status")],
+          ["Programme", reviewValue("timescales")],
+          ["Additional works", reviewValue("groundworks_options")],
+          ["Works details", reviewValue("groundworks")],
+          ["Other information", reviewValue("other_info")]
+        ]);
+        renderReviewSection("reviewContact", [
+          ["Name", [reviewValue("first_name"), reviewValue("last_name")].filter(Boolean).join(" ")],
+          ["Email", reviewValue("email")],
+          ["Telephone", reviewValue("telephone")],
+          ["Response date", reviewValue("return_date")],
+          ["Preferred next step", reviewValue("preferred_next_step")],
+          ["Message", reviewValue("client_message")],
+          ["Files", files],
+          ["Marketing", reviewValue("marketing")]
+        ]);
+      }
+
       function updateStep(newIndex) {
         if (newIndex < 0 || newIndex >= steps.length) return;
         // hide current step and show the requested one
@@ -1112,6 +1565,7 @@
         const progress = ((currentStep + 1) / steps.length) * 100;
         progressFill.style.width = progress + "%";
         stepIndicator.textContent = "Step " + (currentStep + 1) + " of " + steps.length;
+        if (currentStep === steps.length - 1) renderReview();
       }
 
       function validateStep(index) {
@@ -1134,6 +1588,11 @@
       });
       document.querySelectorAll("[data-prev]").forEach((btn) => {
         btn.addEventListener("click", () => updateStep(currentStep - 1));
+      });
+      document.querySelectorAll("[data-edit-step]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          updateStep(Number(btn.getAttribute("data-edit-step")));
+        });
       });
 
       /* CHIP LOGIC --------------------------------------------------- */
@@ -1183,6 +1642,13 @@
         refreshState();
       });
 
+      const buildingTypeSelect = form.elements["building_type"];
+      if (buildingTypeSelect) {
+        buildingTypeSelect.addEventListener("change", () => {
+          updateConditionalFields();
+          updatePreview();
+        });
+      }
       if (roofSelect) {
         roofSelect.addEventListener("change", () => {
           renderRoofGallery();
@@ -1241,6 +1707,11 @@
       const dimHeightLine = document.getElementById("dimHeightLine");
       const dimHeightText = document.getElementById("dimHeightText");
 
+      const dimWidthLabel = document.getElementById("dimWidthLabel");
+      const dimLengthLabel = document.getElementById("dimLengthLabel");
+      const dimHeightLabel = document.getElementById("dimHeightLabel");
+      const previewEl = (id) => document.getElementById(id);
+
       // Use direct selectors to avoid clashing with the form.elements.length property
       const lengthInput = form.querySelector('input[name="length"]');
       const widthInput = form.querySelector('input[name="width"]');
@@ -1258,204 +1729,242 @@
       function updatePreview() {
         if (!svg || !boxGroup || !dimsGroup) return;
 
-        const rawL = parseFloat(lengthInput.value || "0");
-        const rawW = parseFloat(widthInput.value || "0");
-        const rawH = parseFloat(heightInput.value || "0");
+        const numberValue = (name) =>
+          Number.parseFloat(form.querySelector(`[name="${name}"]`)?.value) || 0;
+        const rawL = numberValue("length");
+        const rawW = numberValue("width");
+        const rawH = numberValue("height");
+        const rawLow = numberValue("height_low");
+        const rawHigh = numberValue("height_high");
+        const rawProjection = numberValue("projection");
+        const rawExtension = numberValue("extension_length");
+        const pitchDeg = numberValue("roof_pitch");
+        const pitchRad = pitchDeg * Math.PI / 180;
+        const buildingType = form.elements["building_type"]?.value || "";
+        const isMonopitch = buildingType === "Monopitch";
+        const isLeanTo = buildingType === "Lean to";
+        const isExtension = buildingType === "Extension";
+        const isDuoPitch = buildingType === "Portal" || buildingType === "Freestanding" || isExtension;
+        const units = form.elements["units"]?.value || "";
+        const unitShort = units === "Metres" ? "m" : units === "Feet" ? "ft" : "";
+        const displayValue = (value, fallback) => value > 0
+          ? `${value}${unitShort ? " " + unitShort : ""}`
+          : fallback;
+        const setVisible = (id, visible) => {
+          const el = previewEl(id);
+          if (el) el.style.visibility = visible ? "visible" : "hidden";
+        };
+        const conditionalIds = [
+          "dimHeightLowExtB", "dimHeightLowExtT", "dimHeightLowLine", "dimHeightLowText", "dimHeightLowLabel",
+          "dimHeightHighExtB", "dimHeightHighExtT", "dimHeightHighLine", "dimHeightHighText", "dimHeightHighLabel",
+          "dimProjectionExtF", "dimProjectionExtB", "dimProjectionLine", "dimProjectionText", "dimProjectionLabel",
+          "dimExtensionExtF", "dimExtensionExtB", "dimExtensionLine", "dimExtensionText", "dimExtensionLabel",
+          "dimPitchArc", "dimPitchReference", "dimPitchText", "ridgeLine"
+        ];
+        conditionalIds.forEach((id) => setVisible(id, false));
+        if (leanGroup) leanGroup.style.visibility = "hidden";
+        roof1.style.visibility = "visible";
+        roof2.style.visibility = "visible";
 
-        const unitsVal = form.elements["units"] ? form.elements["units"].value : "";
-        const unitShort =
-          unitsVal === "Metres" ? "m" :
-          unitsVal === "Feet"   ? "ft" : "";
-
-        const anyEntered = rawL > 0 || rawW > 0 || rawH > 0;
-
+        const anyEntered = rawL > 0 || rawW > 0 || rawH > 0 || rawLow > 0 || rawHigh > 0 || rawProjection > 0 || rawExtension > 0;
         if (!anyEntered) {
           boxGroup.style.visibility = "hidden";
           dimsGroup.style.visibility = "hidden";
-          if (leanGroup) leanGroup.style.visibility = "hidden";
-          dimWidthText.textContent = "Width";
-          dimLengthText.textContent = "Length";
-          dimHeightText.textContent = "Height";
           return;
         }
-
         boxGroup.style.visibility = "visible";
         dimsGroup.style.visibility = "visible";
 
-        const fallbackBase = Math.max(rawL || 0, rawW || 0, rawH || 0) || 10;
-        const L = rawL > 0 ? rawL : fallbackBase;
-        const W = rawW > 0 ? rawW : fallbackBase;
-        const H = rawH > 0 ? rawH : fallbackBase;
-
-        // translate real-world numbers into a small isometric cube
-        const cx = 110;
-        const cy = 140;
-        const maxDim = Math.max(W + L, H * 1.5);
-        const s = 120 / maxDim;
-
+        const fallback = Math.max(rawL, rawW, rawH, rawLow, rawHigh, rawProjection, rawExtension, 10);
+        // Lean-tos and extensions are drawn as the proposed structure only.
+        // Their dedicated P/Le values therefore become the preview's width/length.
+        const L = isExtension ? (rawExtension || fallback) : (rawL || fallback);
+        const W = isLeanTo ? (rawProjection || fallback * 0.4) : (rawW || fallback);
+        const P = W;
+        let lowH = rawLow;
+        let highH = rawHigh;
+        if ((isMonopitch || isLeanTo) && pitchDeg > 0) {
+          const run = isLeanTo ? P : W;
+          const rise = run * Math.tan(pitchRad);
+          if (lowH > 0 && highH === 0) highH = lowH + rise;
+          if (highH > 0 && lowH === 0) lowH = Math.max(0.1, highH - rise);
+        }
+        if (isMonopitch || isLeanTo) {
+          lowH = lowH || fallback * 0.7;
+          highH = highH || lowH + (pitchDeg > 0 ? (isLeanTo ? P : W) * Math.tan(pitchRad) : fallback * 0.2);
+        }
+        const H = rawH || fallback * 0.7;
+        const tallest = Math.max(H, lowH, highH);
+        const horizontalExtent = W + L * 0.6;
+        const s = Math.min(8, 205 / Math.max(horizontalExtent, tallest * 1.35, 1));
         const widthX = W * s;
         const lengthX = L * s * 0.6;
-        const lengthY3d = -L * s * 0.4;
-        const heightY = -H * s;
+        const lengthY = -L * s * 0.4;
+        const cx = 72;
+        const cy = 255;
 
-        const FBL = [cx - widthX / 2, cy];
-        const FBR = [cx + widthX / 2, cy];
-        const BBL = [FBL[0] + lengthX, FBL[1] + lengthY3d];
-        const BBR = [FBR[0] + lengthX, FBR[1] + lengthY3d];
+        const FBL = [cx, cy];
+        const FBR = [cx + widthX, cy];
+        const BBL = [FBL[0] + lengthX, FBL[1] + lengthY];
+        const BBR = [FBR[0] + lengthX, FBR[1] + lengthY];
+        const leftHeight = isMonopitch ? lowH : isLeanTo ? highH : H;
+        const rightHeight = isMonopitch ? highH : isLeanTo ? lowH : H;
+        const FTL = [FBL[0], FBL[1] - leftHeight * s];
+        const FTR = [FBR[0], FBR[1] - rightHeight * s];
+        const BTL = [BBL[0], BBL[1] - leftHeight * s];
+        const BTR = [BBR[0], BBR[1] - rightHeight * s];
 
-        const FTL = [FBL[0], FBL[1] + heightY];
-        const FTR = [FBR[0], FBR[1] + heightY];
-        const BTL = [BBL[0], BBL[1] + heightY];
-        const BTR = [BBR[0], BBR[1] + heightY];
-
-        // Faces + edges (front/back + roof surfaces)
         setPoints(faceLeft, [FBL, BBL, BTL, FTL]);
         setPoints(faceRight, [FBR, BBR, BTR, FTR]);
         setPoints(edgesFront, [FBL, FBR, FTR, FTL, FBL]);
         setPoints(edgesBack, [BBL, BBR, BTR, BTL, BBL]);
+        const setLine = (el, a, b) => {
+          if (!el) return;
+          el.setAttribute("x1", a[0]); el.setAttribute("y1", a[1]);
+          el.setAttribute("x2", b[0]); el.setAttribute("y2", b[1]);
+        };
+        const setText = (el, point, value) => {
+          if (!el) return;
+          el.setAttribute("x", point[0]); el.setAttribute("y", point[1]);
+          el.textContent = value;
+        };
+        setLine(edgeLeftVertical, FBL, FTL);
+        setLine(edgeRightVertical, FBR, FTR);
 
-        edgeLeftVertical.setAttribute("x1", FBL[0]);
-        edgeLeftVertical.setAttribute("y1", FBL[1]);
-        edgeLeftVertical.setAttribute("x2", FTL[0]);
-        edgeLeftVertical.setAttribute("y2", FTL[1]);
-        edgeRightVertical.setAttribute("x1", FBR[0]);
-        edgeRightVertical.setAttribute("y1", FBR[1]);
-        edgeRightVertical.setAttribute("x2", FTR[0]);
-        edgeRightVertical.setAttribute("y2", FTR[1]);
-
-        const buildingType = form.elements["building_type"]?.value || "";
-        if (ridgeLine) ridgeLine.style.visibility = "hidden";
-        if (leanGroup) leanGroup.style.visibility = "hidden";
-
-        if (buildingType === "Apex") {
-          // two pitched roof planes meeting at a center ridge
-          const ridgeOffset = H * s * 0.25;
-          const frontRidge = {
-            x: (FTL[0] + FTR[0]) / 2,
-            y: (FTL[1] + FTR[1]) / 2 - ridgeOffset
-          };
-          const backRidge = {
-            x: (BTL[0] + BTR[0]) / 2,
-            y: (BTL[1] + BTR[1]) / 2 - ridgeOffset
-          };
-          setPoints(roof1, [FTL, BTL, [backRidge.x, backRidge.y], [frontRidge.x, frontRidge.y]]);
-          setPoints(roof2, [FTR, BTR, [backRidge.x, backRidge.y], [frontRidge.x, frontRidge.y]]);
-          if (ridgeLine) {
-            ridgeLine.style.visibility = "visible";
-            ridgeLine.setAttribute("x1", frontRidge.x);
-            ridgeLine.setAttribute("y1", frontRidge.y);
-            ridgeLine.setAttribute("x2", backRidge.x);
-            ridgeLine.setAttribute("y2", backRidge.y);
-          }
-        } else if (buildingType === "Mono-pitch") {
-          // single plane roof rising left to right
-          const roofRise = H * s * 0.25;
-          const FTR_high = [FTR[0], FTR[1] - roofRise];
-          const BTR_high = [BTR[0], BTR[1] - roofRise];
-          setPoints(roof1, [FTL, FTR_high, BTR_high, BTL]);
-          setPoints(roof2, [FTR_high, FTR, BTR, BTR_high]);
-        } else if (buildingType === "Lean-to") {
-          // base rectangle plus a slimmer attached lean-to on the right
+        let frontPitchOrigin = null;
+        let frontPitchTarget = null;
+        let pitchReferenceAngle = 0;
+        if (isDuoPitch) {
+          const portalRisePx = (widthX / 2) * Math.tan(pitchRad);
+          const frontRidge = [(FTL[0] + FTR[0]) / 2, Math.min(FTL[1], FTR[1]) - portalRisePx];
+          const backRidge = [frontRidge[0] + lengthX, frontRidge[1] + lengthY];
+          setPoints(roof1, [FTL, BTL, backRidge, frontRidge]);
+          setPoints(roof2, [FTR, BTR, backRidge, frontRidge]);
+          setLine(ridgeLine, frontRidge, backRidge);
+          setVisible("ridgeLine", true);
+          frontPitchOrigin = FTL;
+          frontPitchTarget = frontRidge;
+        } else if (isMonopitch || isLeanTo) {
           setPoints(roof1, [FTL, FTR, BTR, BTL]);
-          setPoints(roof2, [FTL, FTR, BTR, BTL]);
-
-          const extWidth = widthX * 0.5;
-          const extHeight = H * s * 0.6;
-          const eFBL = [FBR[0], FBR[1]];
-          const eFBR = [FBR[0] + extWidth, FBR[1]];
-          const eBBL = [BBR[0], BBR[1]];
-          const eBBR = [BBR[0] + extWidth, BBR[1]];
-          const eFTL = [eFBL[0], eFBL[1] - extHeight];
-          const eFTR = [eFBR[0], eFBR[1] - extHeight * 0.5];
-          const eBTL = [eBBL[0], eBBL[1] - extHeight];
-          const eBTR = [eBBR[0], eBBR[1] - extHeight * 0.5];
-
-          if (leanGroup) {
-            leanGroup.style.visibility = "visible";
-            setPoints(leanWall, [eFBL, eBBL, eBTL, eFTL]);
-            setPoints(leanRoof, [eFTL, eFTR, eBTR, eBTL]);
-            setPoints(leanEdges, [eFBL, eFBR, eFTR, eFTL, eFBL, eBBL, eBTR, eBBR]);
-          }
+          setPoints(roof2, [FTR, BTR, BTL, FTL]);
+          frontPitchOrigin = isLeanTo ? FTR : FTL;
+          frontPitchTarget = isLeanTo ? FTL : FTR;
+          if (isLeanTo) pitchReferenceAngle = Math.PI;
         } else {
-          // Freestanding / Other
           setPoints(roof1, [FTL, FTR, BTR, BTL]);
           setPoints(roof2, [FTL, FTR, BTR, BTL]);
         }
 
-        /* DIMENSIONS -------------------------------------------------- */
-        const gap = 4;
+        // Draw a subdued, non-dimensioned context building so it is clear what
+        // the lean-to attaches to and where the front extension starts.
+        if (isLeanTo) {
+          const contextWidth = Math.min(52, Math.max(34, widthX * 0.7));
+          const eFBL = [FBL[0] - contextWidth, FBL[1]];
+          const eBBL = [BBL[0] - contextWidth, BBL[1]];
+          const eFTL = [eFBL[0], FTL[1]];
+          const eBTL = [eBBL[0], BTL[1]];
+          const eFrontRidge = [(eFTL[0] + FTL[0]) / 2, FTL[1] - 18];
+          const eBackRidge = [eFrontRidge[0] + lengthX, eFrontRidge[1] + lengthY];
+          leanGroup.style.visibility = "visible";
+          leanGroup.style.opacity = "0.45";
+          setPoints(leanWall, [eFBL, FBL, FTL, eFrontRidge, eFTL]);
+          setPoints(leanRoof, [FTL, BTL, eBackRidge, eFrontRidge]);
+          setPoints(leanEdges, [eFBL, FBL, FTL, eFrontRidge, eFTL, eFBL, eBBL, eBTL, eBackRidge, BTL]);
+        } else if (isExtension) {
+          const contextDepth = 58;
+          const runMagnitude = Math.hypot(lengthX, lengthY) || 1;
+          const contextVector = [lengthX / runMagnitude * contextDepth, lengthY / runMagnitude * contextDepth];
+          const cBL = [BBL[0] + contextVector[0], BBL[1] + contextVector[1]];
+          const cBR = [BBR[0] + contextVector[0], BBR[1] + contextVector[1]];
+          const cTL = [BTL[0] + contextVector[0], BTL[1] + contextVector[1]];
+          const cTR = [BTR[0] + contextVector[0], BTR[1] + contextVector[1]];
+          const ridgeRise = (widthX / 2) * Math.tan(pitchRad);
+          const connectionRidge = [(BTL[0] + BTR[0]) / 2, Math.min(BTL[1], BTR[1]) - ridgeRise];
+          const contextRidge = [connectionRidge[0] + contextVector[0], connectionRidge[1] + contextVector[1]];
+          leanGroup.style.visibility = "visible";
+          leanGroup.style.opacity = "0.45";
+          setPoints(leanWall, [BBR, cBR, cTR, BTR]);
+          setPoints(leanRoof, [BTL, cTL, contextRidge, connectionRidge]);
+          setPoints(leanEdges, [BBL, cBL, cTL, contextRidge, cTR, cBR, BBR, BTR, connectionRidge, BTL]);
+        }
 
-        // WIDTH (front edge, horizontal)
-        const widthY = FBL[1] + 10;
-        dimWidthExtL.setAttribute("x1", FBL[0]);
-        dimWidthExtL.setAttribute("y1", FBL[1] + gap);
-        dimWidthExtL.setAttribute("x2", FBL[0]);
-        dimWidthExtL.setAttribute("y2", widthY);
-        dimWidthExtR.setAttribute("x1", FBR[0]);
-        dimWidthExtR.setAttribute("y1", FBR[1] + gap);
-        dimWidthExtR.setAttribute("x2", FBR[0]);
-        dimWidthExtR.setAttribute("y2", widthY);
-        dimWidthLine.setAttribute("x1", FBL[0]);
-        dimWidthLine.setAttribute("y1", widthY);
-        dimWidthLine.setAttribute("x2", FBR[0]);
-        dimWidthLine.setAttribute("y2", widthY);
-        dimWidthText.setAttribute("x", (FBL[0] + FBR[0]) / 2);
-        dimWidthText.setAttribute("y", widthY + 10);
-        dimWidthText.textContent =
-          rawW > 0 ? `${rawW}${unitShort ? " " + unitShort : ""}` : "Width";
+        const gap = 5;
+        const widthY = cy + 18;
+        setLine(dimWidthExtL, FBL, [FBL[0], widthY]);
+        setLine(dimWidthExtR, FBR, [FBR[0], widthY]);
+        setLine(dimWidthLine, [FBL[0], widthY], [FBR[0], widthY]);
+        setText(dimWidthText, [(FBL[0] + FBR[0]) / 2, widthY - 5], isLeanTo ? "P" : "W");
+        setText(
+          dimWidthLabel,
+          [(FBL[0] + FBR[0]) / 2, widthY + 5],
+          isLeanTo ? displayValue(rawProjection, "Projection") : displayValue(rawW, "Width")
+        );
 
-        // LENGTH (horizontal line offset to the right, extensions go sideways instead of down)
-        const lengthOffset = 12;
-        const lenStartX = FBR[0] + lengthOffset;
-        const lenEndX = BBR[0] + lengthOffset;
+        const lenMag = Math.hypot(lengthX, lengthY) || 1;
+        const outward = [-lengthY / lenMag * 18, lengthX / lenMag * 18];
+        const lenStart = [FBR[0] + outward[0], FBR[1] + outward[1]];
+        const lenEnd = [BBR[0] + outward[0], BBR[1] + outward[1]];
+        setLine(dimLengthExtF, FBR, lenStart);
+        setLine(dimLengthExtB, BBR, lenEnd);
+        setLine(dimLengthLine, lenStart, lenEnd);
+        const lenMid = [(lenStart[0] + lenEnd[0]) / 2, (lenStart[1] + lenEnd[1]) / 2];
+        setText(dimLengthText, [lenMid[0] + 5, lenMid[1] - 6], "L");
+        setText(
+          dimLengthLabel,
+          [lenMid[0] + 5, lenMid[1] + 4],
+          isExtension ? displayValue(rawExtension, "Length") : displayValue(rawL, "Length")
+        );
 
-        // Push both extension lines out horizontally from their respective corners
-        dimLengthExtF.setAttribute("x1", FBR[0]);
-        dimLengthExtF.setAttribute("y1", FBR[1]);
-        dimLengthExtF.setAttribute("x2", lenStartX);
-        dimLengthExtF.setAttribute("y2", FBR[1]);
+        const placeVerticalDimension = (prefix, ground, top, side, symbol, value) => {
+          const x = ground[0] + side * 18;
+          const bottom = [x, ground[1]];
+          const upper = [x, top[1]];
+          setLine(previewEl(prefix + "ExtB"), ground, bottom);
+          setLine(previewEl(prefix + "ExtT"), top, upper);
+          setLine(previewEl(prefix + "Line"), bottom, upper);
+          setText(previewEl(prefix + "Text"), [x + side * 5, (ground[1] + top[1]) / 2 - 5], symbol);
+          setText(previewEl(prefix + "Label"), [x + side * 5, (ground[1] + top[1]) / 2 + 5], value);
+          ["ExtB", "ExtT", "Line", "Text", "Label"].forEach((suffix) => setVisible(prefix + suffix, true));
+        };
+        if (isMonopitch) {
+          ["dimHeightExtB", "dimHeightExtT", "dimHeightLine", "dimHeightText", "dimHeightLabel"].forEach((id) => setVisible(id, false));
+          placeVerticalDimension("dimHeightLow", FBL, FTL, -1, "Hl", displayValue(rawLow, "Low"));
+          placeVerticalDimension("dimHeightHigh", FBR, FTR, 1, "Hh", displayValue(rawHigh, "High"));
+        } else if (isLeanTo) {
+          ["dimHeightExtB", "dimHeightExtT", "dimHeightLine", "dimHeightText", "dimHeightLabel"].forEach((id) => setVisible(id, false));
+          placeVerticalDimension("dimHeightHigh", FBL, FTL, -1, "Hh", displayValue(rawHigh, "High"));
+          placeVerticalDimension("dimHeightLow", FBR, FTR, 1, "Hl", displayValue(rawLow, "Low"));
+        } else {
+          ["dimHeightExtB", "dimHeightExtT", "dimHeightLine", "dimHeightText", "dimHeightLabel"].forEach((id) => setVisible(id, true));
+          const hX = FBL[0] - 18;
+          setLine(dimHeightExtB, FBL, [hX, FBL[1]]);
+          setLine(dimHeightExtT, FTL, [hX, FTL[1]]);
+          setLine(dimHeightLine, [hX, FBL[1]], [hX, FTL[1]]);
+          setText(dimHeightText, [hX - gap, (FBL[1] + FTL[1]) / 2 - 5], "He");
+          setText(dimHeightLabel, [hX - gap, (FBL[1] + FTL[1]) / 2 + 5], displayValue(rawH, "Eaves"));
+        }
 
-        dimLengthExtB.setAttribute("x1", BBR[0]);
-        dimLengthExtB.setAttribute("y1", BBR[1]);
-        dimLengthExtB.setAttribute("x2", lenEndX);
-        dimLengthExtB.setAttribute("y2", BBR[1]);
-
-        // Connect the two offset points
-        dimLengthLine.setAttribute("x1", lenStartX);
-        dimLengthLine.setAttribute("y1", FBR[1]);
-        dimLengthLine.setAttribute("x2", lenEndX);
-        dimLengthLine.setAttribute("y2", BBR[1]);
-
-        dimLengthText.setAttribute("x", (lenStartX + lenEndX) / 2);
-        // move the label to the right of the line (further from the building)
-        dimLengthText.setAttribute("y", (FBR[1] + BBR[1]) / 2 + 12);
-        dimLengthText.setAttribute("dominant-baseline", "middle");
-        dimLengthText.textContent =
-          rawL > 0 ? `${rawL}${unitShort ? " " + unitShort : ""}` : "Length";
-
-        // HEIGHT (left, text outside)
-        const hX = FBL[0] - 18;
-        dimHeightLine.setAttribute("x1", hX);
-        dimHeightLine.setAttribute("y1", FBL[1]);
-        dimHeightLine.setAttribute("x2", hX);
-        dimHeightLine.setAttribute("y2", FTL[1]);
-        dimHeightExtB.setAttribute("x1", FBL[0] - gap);
-        dimHeightExtB.setAttribute("y1", FBL[1]);
-        dimHeightExtB.setAttribute("x2", hX);
-        dimHeightExtB.setAttribute("y2", FBL[1]);
-        dimHeightExtT.setAttribute("x1", FTL[0] - gap);
-        dimHeightExtT.setAttribute("y1", FTL[1]);
-        dimHeightExtT.setAttribute("x2", hX);
-        dimHeightExtT.setAttribute("y2", FTL[1]);
-        dimHeightText.setAttribute("x", hX - 6);
-        dimHeightText.setAttribute("y", (FBL[1] + FTL[1]) / 2);
-        dimHeightText.textContent =
-          rawH > 0 ? `${rawH}${unitShort ? " " + unitShort : ""}` : "Height";
+        if (pitchDeg > 0 && frontPitchOrigin && frontPitchTarget) {
+          const roofAngle = Math.atan2(frontPitchTarget[1] - frontPitchOrigin[1], frontPitchTarget[0] - frontPitchOrigin[0]);
+          const startAngle = pitchReferenceAngle === Math.PI ? -Math.PI : 0;
+          const endAngle = roofAngle;
+          const radius = 16;
+          const pointAt = (angle) => [frontPitchOrigin[0] + radius * Math.cos(angle), frontPitchOrigin[1] + radius * Math.sin(angle)];
+          const start = pointAt(startAngle);
+          const end = pointAt(endAngle);
+          const sweep = endAngle > startAngle ? 1 : 0;
+          const arc = previewEl("dimPitchArc");
+          arc.setAttribute("d", `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 0 ${sweep} ${end[0]} ${end[1]}`);
+          setLine(previewEl("dimPitchReference"), frontPitchOrigin, pointAt(startAngle));
+          const midAngle = (startAngle + endAngle) / 2;
+          setText(previewEl("dimPitchText"), [frontPitchOrigin[0] + 25 * Math.cos(midAngle), frontPitchOrigin[1] + 25 * Math.sin(midAngle)], `α ${pitchDeg}°`);
+          ["dimPitchArc", "dimPitchReference", "dimPitchText"].forEach((id) => setVisible(id, true));
+        }
       }
 
       /* SUMMARY ------------------------------------------------------ */
       function getVal(name) {
-        const el = form.elements[name];
+        const el = form.querySelector(`[name="${name}"]`);
         if (!el || el.value == null) return "";
         return el.value;
       }
@@ -1465,6 +1974,15 @@
         const length = getVal("length");
         const width = getVal("width");
         const height = getVal("height");
+        const heightLow = getVal("height_low");
+        const heightHigh = getVal("height_high");
+        const buildingType = getVal("building_type");
+        const usesTwoEaves = ["Monopitch", "Lean to"].includes(buildingType);
+        const summaryLength = buildingType === "Extension" ? getVal("extension_length") : length;
+        const summaryWidth = buildingType === "Lean to" ? getVal("projection") : width;
+        const heightSummary = usesTwoEaves && heightLow && heightHigh
+          ? `${heightLow}-${heightHigh}`
+          : height;
 
         document.getElementById("summarySupply").textContent =
           getVal("supply_option") || "Not selected yet";
@@ -1474,9 +1992,13 @@
           getVal("proposed_use") || "Not set";
 
         document.getElementById("summarySize").textContent =
-          length && width && height
-            ? `${length} × ${width} × ${height}${units ? " " + units : ""}`
+          summaryLength && summaryWidth && heightSummary
+            ? `${summaryLength} × ${summaryWidth} × ${heightSummary}${units ? " " + units : ""}`
             : "Sizing to be confirmed";
+
+        const roofPitch = getVal("roof_pitch");
+        document.getElementById("summaryRoofPitch").textContent =
+          roofPitch ? `${roofPitch}°` : "Not set";
 
         const roofVal = getVal("roof_material");
         document.getElementById("summaryRoof").textContent =
@@ -1566,8 +2088,11 @@
 
           setSubmitMessage(message, "error");
         } catch (_error) {
+          const openedAsFile = window.location.protocol === "file:";
           setSubmitMessage(
-            "Could not send your request right now. Please try again.",
+            openedAsFile
+              ? "The quote form is open as a local file. Please open it through the app server before submitting."
+              : "Could not reach the quote service. Please check your connection and try again.",
             "error"
           );
         } finally {
@@ -1579,6 +2104,7 @@
       // Initialise
       renderRoofGallery();
       renderWallGallery();
+      updateConditionalFields();
       updateSummary();
     })();
   </script>
