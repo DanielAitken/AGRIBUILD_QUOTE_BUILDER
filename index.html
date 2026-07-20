@@ -545,9 +545,9 @@
               </div>
 
               <div class="qb-field" id="projectionField" style="display:none;">
-                <label class="qb-label">Projection/Width (P)</label>
+                <label class="qb-label">Width (W)</label>
                 <input type="number" step="0.01" min="0" name="projection" class="qb-input" placeholder="e.g. 6" />
-                <div class="qb-help">Width of the lean-to projection.</div>
+                <div class="qb-help">Overall width of the lean-to.</div>
               </div>
 
               <div class="qb-field" id="extensionLengthField" style="display:none;">
@@ -1131,8 +1131,8 @@
                   <line id="dimProjectionExtF" visibility="hidden"></line>
                   <line id="dimProjectionExtB" visibility="hidden"></line>
                   <line id="dimProjectionLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimProjectionText" text-anchor="middle" dy="-4" visibility="hidden">P</text>
-                  <text id="dimProjectionLabel" text-anchor="middle" dy="12" font-size="8" visibility="hidden">Project.</text>
+                  <text id="dimProjectionText" text-anchor="middle" dy="-4" visibility="hidden">W</text>
+                  <text id="dimProjectionLabel" text-anchor="middle" dy="12" font-size="8" visibility="hidden">Width</text>
                   <line id="dimExtensionExtF" visibility="hidden"></line>
                   <line id="dimExtensionExtB" visibility="hidden"></line>
                   <line id="dimExtensionLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
@@ -1893,11 +1893,11 @@
         setLine(dimWidthExtL, FBL, [FBL[0], widthY]);
         setLine(dimWidthExtR, FBR, [FBR[0], widthY]);
         setLine(dimWidthLine, [FBL[0], widthY], [FBR[0], widthY]);
-        setText(dimWidthText, [(FBL[0] + FBR[0]) / 2, widthY - 5], isLeanTo ? "P" : "W");
+        setText(dimWidthText, [(FBL[0] + FBR[0]) / 2, widthY - 5], "W");
         setText(
           dimWidthLabel,
           [(FBL[0] + FBR[0]) / 2, widthY + 5],
-          isLeanTo ? displayValue(rawProjection, "Projection") : displayValue(rawW, "Width")
+          isLeanTo ? displayValue(rawProjection, "Width") : displayValue(rawW, "Width")
         );
 
         const lenMag = Math.hypot(lengthX, lengthY) || 1;

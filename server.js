@@ -559,6 +559,9 @@ app.post("/quote", requireSameOrigin, limitQuoteRequests, parseQuoteUploads, val
     const smtpConfig = getSmtpConfig();
 
     const body = req.body || {};
+    if (body.building_type === "Lean to" && body.projection && !body.width) {
+      body.width = body.projection;
+    }
     const lines = [
       "New AgriBuild quote request",
       "--------------------------------",
