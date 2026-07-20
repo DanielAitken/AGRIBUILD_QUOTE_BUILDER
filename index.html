@@ -33,7 +33,7 @@
       color: var(--qb-text-main);
     }
     /* Simple centered wrapper so the card stays at a readable width */
-    .qb-wrapper { max-width: 1160px; margin: 0 auto; }
+    .qb-wrapper { max-width: 1280px; margin: 0 auto; }
     .qb-site-header{
       min-height:76px; display:flex; align-items:center; justify-content:space-between;
       gap:1.5rem; padding:0.9rem 1.15rem; margin:0 -1.5rem;
@@ -101,9 +101,9 @@
     .qb-layout {
       display:grid; grid-template-columns:1fr; gap:1.75rem; margin-top:1.5rem;
     }
-    @media (min-width:900px){
+    @media (min-width:1050px){
       .qb-layout {
-        grid-template-columns:minmax(0,2.3fr) minmax(0,1.4fr);
+        grid-template-columns:minmax(0,1.9fr) minmax(420px,1.5fr);
         align-items:flex-start;
       }
     }
@@ -509,39 +509,39 @@
               </div>
 
               <div class="qb-field" id="lengthField">
-                <label class="qb-label">Length</label>
+                <label class="qb-label">Length (L)</label>
                 <input type="number" step="0.01" min="0" name="length" class="qb-input" placeholder="e.g. 40" required />
               </div>
 
               <div class="qb-field" id="widthField">
-                <label class="qb-label">Width</label>
+                <label class="qb-label">Width (W)</label>
                 <input type="number" step="0.01" min="0" name="width" class="qb-input" placeholder="e.g. 30" required />
               </div>
 
               <div class="qb-field" id="eavesHeightField">
-                <label class="qb-label">Height to eaves (He)</label>
+                <label class="qb-label">Eaves height (H)</label>
                 <input type="number" step="0.01" min="0" name="height" class="qb-input" placeholder="e.g. 12" required />
               </div>
 
               <div class="qb-field" id="lowEavesField" style="display:none;">
-                <label class="qb-label">Low eaves height (Hl)</label>
+                <label class="qb-label">Low eaves height (H)</label>
                 <input type="number" step="0.01" min="0" name="height_low" class="qb-input" placeholder="e.g. 8" />
                 <div class="qb-help">Height at the lower end of the roof slope.</div>
               </div>
 
               <div class="qb-field" id="highEavesField" style="display:none;">
-                <label class="qb-label">High eaves height (Hh)</label>
+                <label class="qb-label">High eaves height (H)</label>
                 <input type="number" step="0.01" min="0" name="height_high" class="qb-input" placeholder="e.g. 14" />
                 <div class="qb-help">Height at the higher end of the roof slope.</div>
               </div>
 
               <div class="qb-field">
                 <label class="qb-label">
-                  Roof pitch (α)
+                  Roof pitch (degrees)
                   <span>optional</span>
                 </label>
                 <input type="number" step="0.1" min="0" max="45" name="roof_pitch" class="qb-input" placeholder="e.g. 10" />
-                <div class="qb-help">Pitch angle in degrees.</div>
+                <div class="qb-help">Enter the roof angle in degrees, e.g. 10°.</div>
               </div>
 
               <div class="qb-field" id="projectionField" style="display:none;">
@@ -1069,14 +1069,14 @@
                 <span class="qb-summary-pill">Not to scale</span>
               </div>
 
-              <svg id="planPreview" viewBox="0 0 400 340" style="width:100%;max-width:600px;">
+              <svg id="planPreview" viewBox="0 0 480 360" style="display:block;width:100%;max-width:720px;margin:0 auto;overflow:visible;">
                 <defs>
                   <marker id="dimArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
                     <path d="M0,0 L8,4 L0,8 Z" fill="#9ca3af" />
                   </marker>
                 </defs>
 
-                <rect x="0" y="0" width="400" height="340" fill="#020617"></rect>
+                <rect x="0" y="0" width="480" height="360" fill="#020617"></rect>
 
                 <!-- Main box -->
                 <g id="boxGroup" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round">
@@ -1116,18 +1116,18 @@
                   <line id="dimHeightExtB"></line>
                   <line id="dimHeightExtT"></line>
                   <line id="dimHeightLine" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimHeightText" text-anchor="end" dx="-6">He</text>
-                  <text id="dimHeightLabel" text-anchor="end" dx="-6" dy="12" font-size="8">Eaves</text>
+                  <text id="dimHeightText" text-anchor="end" dx="-6" font-size="9">Eaves height (H)</text>
+                  <text id="dimHeightLabel" text-anchor="end" dx="-6" dy="12" font-size="8">Height</text>
                   <line id="dimHeightLowExtB" visibility="hidden"></line>
                   <line id="dimHeightLowExtT" visibility="hidden"></line>
                   <line id="dimHeightLowLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimHeightLowText" text-anchor="end" dx="-6" visibility="hidden">Hl</text>
-                  <text id="dimHeightLowLabel" text-anchor="end" dx="-6" dy="12" font-size="8" visibility="hidden">Low</text>
+                  <text id="dimHeightLowText" text-anchor="end" dx="-6" font-size="9" visibility="hidden">Low eaves (H)</text>
+                  <text id="dimHeightLowLabel" text-anchor="end" dx="-6" dy="12" font-size="8" visibility="hidden">Height</text>
                   <line id="dimHeightHighExtB" visibility="hidden"></line>
                   <line id="dimHeightHighExtT" visibility="hidden"></line>
                   <line id="dimHeightHighLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
-                  <text id="dimHeightHighText" text-anchor="end" dx="-6" visibility="hidden">Hh</text>
-                  <text id="dimHeightHighLabel" text-anchor="end" dx="-6" dy="12" font-size="8" visibility="hidden">High</text>
+                  <text id="dimHeightHighText" text-anchor="end" dx="-6" font-size="9" visibility="hidden">High eaves (H)</text>
+                  <text id="dimHeightHighLabel" text-anchor="end" dx="-6" dy="12" font-size="8" visibility="hidden">Height</text>
                   <line id="dimProjectionExtF" visibility="hidden"></line>
                   <line id="dimProjectionExtB" visibility="hidden"></line>
                   <line id="dimProjectionLine" visibility="hidden" marker-start="url(#dimArrow)" marker-end="url(#dimArrow)"></line>
@@ -1140,12 +1140,12 @@
                   <text id="dimExtensionLabel" text-anchor="middle" dy="12" font-size="8" visibility="hidden">Ext.</text>
                   <path id="dimPitchArc" visibility="hidden" fill="none"></path>
                   <line id="dimPitchReference" visibility="hidden"></line>
-                  <text id="dimPitchText" visibility="hidden" font-size="9">alpha</text>
+                  <text id="dimPitchText" visibility="hidden" font-size="9">Roof pitch</text>
                 </g>
               </svg>
 
               <div class="qb-summary-footer">
-                This sketch updates from your length, width and height – and the building type.
+                This sketch updates from your length, width and eaves height – and the building type.
                 It’s just a guide – final drawings are prepared by our design team.
               </div>
             </div>
@@ -1494,13 +1494,19 @@
         const width = buildingType === "Lean to"
           ? reviewValue("projection")
           : reviewValue("width");
-        const height = ["Monopitch", "Lean to"].includes(buildingType)
-          ? [reviewValue("height_low"), reviewValue("height_high")].filter(Boolean).join("–")
-          : reviewValue("height");
+        const usesTwoEaves = ["Monopitch", "Lean to"].includes(buildingType);
+        const height = reviewValue("height");
+        const heightLow = reviewValue("height_low");
+        const heightHigh = reviewValue("height_high");
         const sizeParts = [];
         if (length) sizeParts.push(`${length} L`);
         if (width) sizeParts.push(`${width} W`);
-        if (height) sizeParts.push(`${height} H`);
+        if (usesTwoEaves) {
+          if (heightLow) sizeParts.push(`${heightLow} low eaves (H)`);
+          if (heightHigh) sizeParts.push(`${heightHigh} high eaves (H)`);
+        } else if (height) {
+          sizeParts.push(`${height} eaves height (H)`);
+        }
         const size = sizeParts.length
           ? `${sizeParts.join(" × ")}${units ? " " + units : ""}`
           : "";
@@ -1777,7 +1783,7 @@
 
         const fallback = Math.max(rawL, rawW, rawH, rawLow, rawHigh, rawProjection, rawExtension, 10);
         // Lean-tos and extensions are drawn as the proposed structure only.
-        // Their dedicated P/Le values therefore become the preview's width/length.
+        // Their dedicated values therefore become the preview's width/length.
         const L = isExtension ? (rawExtension || fallback) : (rawL || fallback);
         const W = isLeanTo ? (rawProjection || fallback * 0.4) : (rawW || fallback);
         const P = W;
@@ -1796,12 +1802,12 @@
         const H = rawH || fallback * 0.7;
         const tallest = Math.max(H, lowH, highH);
         const horizontalExtent = W + L * 0.6;
-        const s = Math.min(8, 205 / Math.max(horizontalExtent, tallest * 1.35, 1));
+        const s = Math.min(9, 245 / Math.max(horizontalExtent, tallest * 1.35, 1));
         const widthX = W * s;
         const lengthX = L * s * 0.6;
         const lengthY = -L * s * 0.4;
-        const cx = 72;
-        const cy = 255;
+        const cx = 120;
+        const cy = 275;
 
         const FBL = [cx, cy];
         const FBR = [cx + widthX, cy];
@@ -1919,29 +1925,37 @@
           const x = ground[0] + side * 18;
           const bottom = [x, ground[1]];
           const upper = [x, top[1]];
+          const textElement = previewEl(prefix + "Text");
+          const valueElement = previewEl(prefix + "Label");
+          const textAnchor = side < 0 ? "end" : "start";
           setLine(previewEl(prefix + "ExtB"), ground, bottom);
           setLine(previewEl(prefix + "ExtT"), top, upper);
           setLine(previewEl(prefix + "Line"), bottom, upper);
-          setText(previewEl(prefix + "Text"), [x + side * 5, (ground[1] + top[1]) / 2 - 5], symbol);
-          setText(previewEl(prefix + "Label"), [x + side * 5, (ground[1] + top[1]) / 2 + 5], value);
+          [textElement, valueElement].forEach((element) => {
+            if (!element) return;
+            element.setAttribute("text-anchor", textAnchor);
+            element.setAttribute("dx", "0");
+          });
+          setText(textElement, [x + side * 7, (ground[1] + top[1]) / 2 - 5], symbol);
+          setText(valueElement, [x + side * 7, (ground[1] + top[1]) / 2 + 5], value);
           ["ExtB", "ExtT", "Line", "Text", "Label"].forEach((suffix) => setVisible(prefix + suffix, true));
         };
         if (isMonopitch) {
           ["dimHeightExtB", "dimHeightExtT", "dimHeightLine", "dimHeightText", "dimHeightLabel"].forEach((id) => setVisible(id, false));
-          placeVerticalDimension("dimHeightLow", FBL, FTL, -1, "Hl", displayValue(rawLow, "Low"));
-          placeVerticalDimension("dimHeightHigh", FBR, FTR, 1, "Hh", displayValue(rawHigh, "High"));
+          placeVerticalDimension("dimHeightLow", FBL, FTL, -1, "Low eaves (H)", displayValue(rawLow, "H"));
+          placeVerticalDimension("dimHeightHigh", FBR, FTR, 1, "High eaves (H)", displayValue(rawHigh, "H"));
         } else if (isLeanTo) {
           ["dimHeightExtB", "dimHeightExtT", "dimHeightLine", "dimHeightText", "dimHeightLabel"].forEach((id) => setVisible(id, false));
-          placeVerticalDimension("dimHeightHigh", FBL, FTL, -1, "Hh", displayValue(rawHigh, "High"));
-          placeVerticalDimension("dimHeightLow", FBR, FTR, 1, "Hl", displayValue(rawLow, "Low"));
+          placeVerticalDimension("dimHeightHigh", FBL, FTL, -1, "High eaves (H)", displayValue(rawHigh, "H"));
+          placeVerticalDimension("dimHeightLow", FBR, FTR, 1, "Low eaves (H)", displayValue(rawLow, "H"));
         } else {
           ["dimHeightExtB", "dimHeightExtT", "dimHeightLine", "dimHeightText", "dimHeightLabel"].forEach((id) => setVisible(id, true));
           const hX = FBL[0] - 18;
           setLine(dimHeightExtB, FBL, [hX, FBL[1]]);
           setLine(dimHeightExtT, FTL, [hX, FTL[1]]);
           setLine(dimHeightLine, [hX, FBL[1]], [hX, FTL[1]]);
-          setText(dimHeightText, [hX - gap, (FBL[1] + FTL[1]) / 2 - 5], "He");
-          setText(dimHeightLabel, [hX - gap, (FBL[1] + FTL[1]) / 2 + 5], displayValue(rawH, "Eaves"));
+          setText(dimHeightText, [hX - gap, (FBL[1] + FTL[1]) / 2 - 5], "Eaves height (H)");
+          setText(dimHeightLabel, [hX - gap, (FBL[1] + FTL[1]) / 2 + 5], displayValue(rawH, "H"));
         }
 
         if (pitchDeg > 0 && frontPitchOrigin && frontPitchTarget) {
@@ -1956,8 +1970,13 @@
           const arc = previewEl("dimPitchArc");
           arc.setAttribute("d", `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 0 ${sweep} ${end[0]} ${end[1]}`);
           setLine(previewEl("dimPitchReference"), frontPitchOrigin, pointAt(startAngle));
-          const midAngle = (startAngle + endAngle) / 2;
-          setText(previewEl("dimPitchText"), [frontPitchOrigin[0] + 25 * Math.cos(midAngle), frontPitchOrigin[1] + 25 * Math.sin(midAngle)], `α ${pitchDeg}°`);
+          const pitchText = previewEl("dimPitchText");
+          const pitchMidpoint = [
+            (frontPitchOrigin[0] + frontPitchTarget[0]) / 2,
+            Math.min(frontPitchOrigin[1], frontPitchTarget[1]) - 16
+          ];
+          if (pitchText) pitchText.setAttribute("text-anchor", "middle");
+          setText(pitchText, pitchMidpoint, `Roof pitch ${pitchDeg}°`);
           ["dimPitchArc", "dimPitchReference", "dimPitchText"].forEach((id) => setVisible(id, true));
         }
       }
@@ -1980,9 +1999,15 @@
         const usesTwoEaves = ["Monopitch", "Lean to"].includes(buildingType);
         const summaryLength = buildingType === "Extension" ? getVal("extension_length") : length;
         const summaryWidth = buildingType === "Lean to" ? getVal("projection") : width;
-        const heightSummary = usesTwoEaves && heightLow && heightHigh
-          ? `${heightLow}-${heightHigh}`
-          : height;
+        const sizeParts = [];
+        if (summaryLength) sizeParts.push(`${summaryLength} L`);
+        if (summaryWidth) sizeParts.push(`${summaryWidth} W`);
+        if (usesTwoEaves) {
+          if (heightLow) sizeParts.push(`${heightLow} low eaves (H)`);
+          if (heightHigh) sizeParts.push(`${heightHigh} high eaves (H)`);
+        } else if (height) {
+          sizeParts.push(`${height} eaves height (H)`);
+        }
 
         document.getElementById("summarySupply").textContent =
           getVal("supply_option") || "Not selected yet";
@@ -1991,10 +2016,9 @@
         document.getElementById("summaryUse").textContent =
           getVal("proposed_use") || "Not set";
 
-        document.getElementById("summarySize").textContent =
-          summaryLength && summaryWidth && heightSummary
-            ? `${summaryLength} × ${summaryWidth} × ${heightSummary}${units ? " " + units : ""}`
-            : "Sizing to be confirmed";
+        document.getElementById("summarySize").textContent = sizeParts.length
+          ? `${sizeParts.join(" × ")}${units ? " " + units : ""}`
+          : "Sizing to be confirmed";
 
         const roofPitch = getVal("roof_pitch");
         document.getElementById("summaryRoofPitch").textContent =

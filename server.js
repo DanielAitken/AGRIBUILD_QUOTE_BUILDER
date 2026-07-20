@@ -375,6 +375,13 @@ function buildQuotePdf(body, files) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ size: "A4", margin: 48 });
     const chunks = [];
+    const usesTwoEaves = ["Monopitch", "Lean to"].includes(body.building_type);
+    const heightFields = usesTwoEaves
+      ? [
+          ["Low eaves height (H)", "height_low"],
+          ["High eaves height (H)", "height_high"],
+        ]
+      : [["Eaves height (H)", "height"]];
 
     doc.on("data", (chunk) => chunks.push(chunk));
     doc.on("end", () => resolve(Buffer.concat(chunks)));
@@ -406,9 +413,10 @@ function buildQuotePdf(body, files) {
           ["Proposed use", "proposed_use"],
           ["Building type", "building_type"],
           ["Units", "units"],
-          ["Length", "length"],
-          ["Width", "width"],
-          ["Height", "height"],
+          ["Length (L)", "length"],
+          ["Width (W)", "width"],
+          ...heightFields,
+          ["Roof pitch (degrees)", "roof_pitch"],
           ["Project notes", "project_notes"],
         ],
       },
@@ -562,6 +570,10 @@ app.post("/quote", requireSameOrigin, limitQuoteRequests, parseQuoteUploads, val
     if (body.building_type === "Lean to" && body.projection && !body.width) {
       body.width = body.projection;
     }
+    if (body.building_type === "Extension" && body.extension_length && !body.length) {
+      body.length = body.extension_length;
+    }
+    const usesTwoEaves = ["Monopitch", "Lean to"].includes(body.building_type);
     const lines = [
       "New AgriBuild quote request",
       "--------------------------------",
@@ -571,9 +583,15 @@ app.post("/quote", requireSameOrigin, limitQuoteRequests, parseQuoteUploads, val
       formatField("Proposed use", body.proposed_use),
       formatField("Building type", body.building_type),
       formatField("Units", body.units),
-      formatField("Length", body.length),
-      formatField("Width", body.width),
-      formatField("Height", body.height),
+      formatField("Length (L)", body.length),
+      formatField("Width (W)", body.width),
+      ...(usesTwoEaves
+        ? [
+            formatField("Low eaves height (H)", body.height_low),
+            formatField("High eaves height (H)", body.height_high),
+          ]
+        : [formatField("Eaves height (H)", body.height)]),
+      formatField("Roof pitch (degrees)", body.roof_pitch),
       formatField("Project notes", body.project_notes),
       "",
       formatField("Steelwork finish", body.steelwork_finish),
